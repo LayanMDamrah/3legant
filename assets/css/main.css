@@ -136,3 +136,20 @@
     font-size: var(--fs-paragraph-small);
     font-family: var(--primary1);
 }
+
+
+/* navbar */
+.nav-icon {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.navbar .nav-item .nav-link:hover {
+    color: var(--orange);
+}
+
+
+
