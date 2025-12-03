@@ -178,4 +178,17 @@
     width: 100%;
 }
 
+/* cards */
 
+.custom-card {
+    background-color: var(--o2) !important; 
+    border-radius: 20px;       
+    width: 22rem;             
+    padding: 20px;  
+     width: 100%;   
+}
+
+.custom-card img {
+    width: 60px; 
+    height: auto;
+}
