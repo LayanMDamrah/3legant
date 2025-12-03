@@ -178,4 +178,7 @@
     width: 100%;
 }
 
-
+/* Product-Hero */
+.img-scale{
+    scale: 1.3;
+}
