@@ -229,3 +229,10 @@
     gap: 30px;
   }
 }
+
+/* login */
+.login-img  {
+    height: 100vh;
+    object-fit: cover;
+    width: 100%;
+}
