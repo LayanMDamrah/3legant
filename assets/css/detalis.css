@@ -1,0 +1,29 @@
+.heading_scale{
+    font-size: 300%;
+}
+
+.price_scale{
+    font-size: 200%;
+}
+
+.description{
+   font-size: 100%;
+   text-align: justify; 
+}
+
+.time{
+    font-size: 200%;
+    text-align: center;
+    word-break: break-word;   /* تكسر الكلمات الطويلة */
+    overflow-wrap: break-word; 
+}
+
+.time_type{
+    font-size: 100%;
+    text-align: center;
+    word-break: break-word;   /* تكسر الكلمات الطويلة */
+    overflow-wrap: break-word; 
+}
+.button_padding{
+    padding: 0.71rem;
+}
