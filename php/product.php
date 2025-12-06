@@ -16,13 +16,12 @@ class Product{
     static function addToCart($product_id, $product_quantity, $product_price){
         $conn = Database::connect();
 
-        $total = $product_quantity * $product_price;
-        $sub_total = $total;
+        $sub_total = $product_quantity * $product_price;
         
         $sql = "INSERT INTO cart (Product_Id, Product_Quantity, Product_Price, Total, Sub_Total) 
                 Values (?, ?, ?, ?, ?)";
         $query = $conn->prepare($sql); 
-        $query->bind_param("iiddd", $product_id, $product_quantity, $product_price,$total, $sub_total);
+        $query->bind_param("iidd", $product_id, $product_quantity, $product_price, $sub_total);
         
         return $query->execute();
     }

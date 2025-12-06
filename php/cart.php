@@ -2,6 +2,21 @@
 require_once("tools.php");
 
 class Cart{
+    static function getCartItems(){
+        $conn = Database::connect();
+
+        $sql = "SELECT 
+                    cart.*, 
+                    product.Name, 
+                    product.Description, 
+                    product.Photo 
+                FROM cart
+                JOIN product ON cart.Product_Id = product.ID";
+
+        $query = $conn->query($sql);
+        return $query->fetch_all(MYSQLI_ASSOC);
+    }
+    
     static function getTotal(){
         $conn = Database::connect();
     }
