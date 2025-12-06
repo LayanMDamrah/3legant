@@ -1,3 +1,6 @@
+<?php
+    include("php/database.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +41,7 @@
                     </div>
 
                     <!-- input form -->
-                    <form action="php/login.php" method="POST" class="p-4 border-0 rounded">
+                    <form action="./php/login1.php" method="POST" class="p-4 border-0 rounded">
 
                         <div class="mb-4">
 
@@ -53,7 +56,7 @@
                         </div>
 
                         <div class="text-center">
-                            <button id="home-login" type="submit" class="btn btn-dark border-0 w-100">
+                            <button type="submit" name="login" value="login" class="btn btn-dark border-0 w-100">
                                 Login
                             </button>
                         </div>
