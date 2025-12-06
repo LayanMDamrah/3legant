@@ -1,3 +1,4 @@
 <?php
-    include("database.php");
+require_once("tools.php");
+
 ?>
