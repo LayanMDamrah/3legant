@@ -1,3 +1,4 @@
+
 document.getElementById("myImage").onclick = function() {
     window.location.href = "shop.html";
 };
