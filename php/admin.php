@@ -18,6 +18,28 @@ class Admin{
         return false;
     }
 
+    // Get all pending users
+    static function getPendingUsers(){
+        $conn = Database::connect();
+        $sql = "SELECT * FROM user WHERE Status='pending'";
+        $result = $conn->query($sql);
+
+        $users = [];
+        while($row = $result->fetch_assoc()){
+            $users[] = $row;
+        }
+        return $users;
+    }
+
+    // Approve a specific user
+    static function approveUser($user_id){
+        $conn = Database::connect();
+        $sql = "UPDATE user SET Status='approved' WHERE User_Id=?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        return $stmt->execute();
+    }
+
     static function deleteUsers($user_id){
         $conn = Database::connect();
     
@@ -70,7 +92,8 @@ class Admin{
 
         return $query->execute(); 
     }
-
+// for now it is not neccesary
+/*
     static function signUp($name, $email, $age, $role, $password, $photo){
         $conn = Database::connect();
 
@@ -93,5 +116,6 @@ class Admin{
 
         return $query->get_queryult()->fetch_assoc();
     }
+*/
 }
 ?>

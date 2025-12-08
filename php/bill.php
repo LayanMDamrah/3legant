@@ -1,16 +1,4 @@
 <?php
-/*require_once 'database.php';
-
-$conn = Database::connect();
-
-if ($conn) {
-    echo "Connected!";
-} else {
-    echo "Failed!";
-}*/
-?>
-
-<?php
 require_once("tools.php");
 
 class Bill{
