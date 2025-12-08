@@ -45,7 +45,8 @@ class Account{
 
         return $query->get_queryult()->fetch_assoc();
     }
-
+// for now it is not neccesary
+/*  
     static function signUp($name, $email, $age, $role, $password, $photo){
         $conn = Database::connect();
 
@@ -74,5 +75,6 @@ class Account{
 
         return false;
     }
+*/        
 }
 ?>
