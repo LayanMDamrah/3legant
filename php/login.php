@@ -1,8 +1,7 @@
 <?php
 session_start();
-require_once("tools.php");
-
-$conn = Database::connect();
+require_once("tools.php");  
+$conn = Database::connect();  
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -10,32 +9,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_SPECIAL_CHARS);
 
     if (empty($username)) {
-        exit("Please enter a username");
-    } 
+        exit("Please enter a username or email");
+    }
+
     if (empty($password)) {
         exit("Please enter a password");
     }
 
-    // Correct MySQLi prepared statement
-    $query = $conn->prepare("SELECT * FROM user WHERE Name = ?");
+    $errors = [];
+
+    // Try searching if the name exist 
+    $query = $conn->prepare("SELECT * FROM account WHERE Name = ?");
     $query->bind_param("s", $username);
     $query->execute();
-
     $result = $query->get_result();
     $user = $result->fetch_assoc();
 
-        // Username wrong
+    // If the name doesn't exits try search by the email  
     if (!$user) {
-        $errors[] = "username";
+        $query = $conn->prepare("SELECT * FROM account WHERE Email = ?");
+        $query->bind_param("s", $username);
+        $query->execute();
+        $result = $query->get_result();
+        $user = $result->fetch_assoc();
+
+        // If also the email doesn't exits
+        if (!$user) {
+            $errors[] = "username";
+        }
     }
 
-    // Password wrong if user exists
-    if ($user && $password !== $user["Password"]) {
-        $errors[] = "password";
-    }
-
-    // If username does not exist, password is automatically wrong
-    if (!$user && !empty($password)) {
+    // If the password wrong
+    if ($user && !password_verify($password, $user["Password"])) {
         $errors[] = "password";
     }
 
@@ -43,7 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../login.html?error=" . implode(",", $errors));
         exit();
     }
-
 
     // Save session
     $_SESSION["user"] = $user["Name"];

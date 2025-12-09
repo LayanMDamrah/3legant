@@ -3,37 +3,47 @@ require_once("tools.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    $name = trim($_POST["name"]);
-    $age = intval($_POST["age"]);
-    $email = trim($_POST["email"]);
+    $name = $_POST["name"];
+    $age = $_POST["age"];
+    $email = $_POST["email"];
     $password = $_POST["password"];
 
-    // validation
     if (empty($name) || empty($email) || empty($password) || $age <= 0) {
-        die("Invalid input!");
+        header("Location: ../sign-up.html?error=invalid");
+        exit();
     }
 
     $conn = Database::connect();
 
-    // Hashing password
+    // Check if email exists
+    $check = $conn->prepare("SELECT Email FROM account WHERE Email=?");
+    $check->bind_param("s", $email);
+    $check->execute();
+    $result = $check->get_result();
+
+    if ($result->num_rows > 0) {
+        // Email already used
+        header("Location: ../sign-up.html?error=alreadyused");
+        exit();
+    }
+
+    // Insert new user (pending approval)
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    // Default values
     $role = "user";
     $photo = "default.jpg";
     $status = "pending";
 
-    $sql = "INSERT INTO account (Name, Email, Age, Role, Password, Photo) 
-            VALUES (?, ?, ?, ?, ?, ?)";
-
+    $sql = "INSERT INTO account (Name, Email, Age, Role, Password, Photo, Status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssisss", $name, $email, $age, $role, $hashed, $photo);
+    $stmt->bind_param("ssissss", $name, $email, $age, $role, $hashed, $photo, $status);
 
     if ($stmt->execute()) {
-        echo "<h2>Your account has been created and is awaiting admin approval.</h2>";
-        echo "<a href='../login.html'>Go to Login</a>";
+        header("Location: ../index.html");
+        exit();
     } else {
-        echo "Error: " . $conn->error;
+        header("Location: ../sign-up.html");
+        exit();
     }
 }
-?>
