@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once("tools.php");  
-$conn = Database::connect();  
+require_once("tools.php");
+$conn = Database::connect();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -51,8 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Save session
     $_SESSION["user"] = $user["Name"];
-
-    header("Location: ../index.html");
+    header("Location: ../index.html?success=1");
     exit();
 }
-?>

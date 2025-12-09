@@ -60,9 +60,12 @@
                     <a href="./cart.html" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    <button class="btn btn-dark ">
-                        <a class="text-decoration-none text-white" href="./login.html">Login</a>
-                    </button>
+                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
+                        <button class="btn btn-dark" id="login-btn">
+                            <a class="text-decoration-none text-white" href="./login.html">Login</a>
+                        </button>
+                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,8 +130,8 @@
         <div class="Heading-4 ">
             Total: $<span id="cart-total">110</span>
         </div>
-<a href="">
-      <button class="btn btn-dark btn-lg px-4">
+<a href="bill.html">
+        <button class="btn btn-dark btn-lg px-4">
             Checkout
         </button>
 </a>
@@ -143,6 +146,7 @@
     <!-- Link JS file here -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/counter.js"></script>
+    <script src="./assets/js/entery.js"></script>
 
 
 </body>

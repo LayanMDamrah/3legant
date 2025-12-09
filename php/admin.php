@@ -7,7 +7,7 @@ class Admin
     {
         $conn = Database::connect();
 
-        // توليد كلمة مرور عشوائية
+        // Random password
         $plain_pass = bin2hex(random_bytes(4));
         $hash = password_hash($plain_pass, PASSWORD_DEFAULT);
 
@@ -18,7 +18,7 @@ class Admin
         $stmt->bind_param("ssissss", $name, $email, $age, $role, $photo, $hash, $status);
 
         if ($stmt->execute()) {
-            // حفظ جميع البيانات في الجلسة
+            // Save Info in the session
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
