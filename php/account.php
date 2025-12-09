@@ -45,36 +45,6 @@ class Account{
 
         return $query->get_queryult()->fetch_assoc();
     }
-// for now it is not neccesary
-/*  
-    static function signUp($name, $email, $age, $role, $password, $photo){
-        $conn = Database::connect();
-
-        $hash = password_hash($password, PASSWORD_DEFAULT);
-
-        $sql = "INSERT INTO user(Name, Email, Age, Role, Password, Photo) Values(?, ? ,? ,? ,? ,? ,?)"; 
-        $query = $conn->prepare($sql); 
-        $query->bind_param("ssisss", $name, $email, $age, $role, $hash, $photo);
-
-        return $query->execute();
-    }
-
-    static function login($email, $password){
-        $conn = Database::connect();
-
-        $sql = "SELECT * FROM user WHERE Email = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("s", $email);
-        $query->execute();
-
-        $queryult = $query->get_queryult();
-        $user = $queryult->fetch_assoc();
-
-        if($user && password_verify($password, $user["Password"]))
-            return $user;
-
-        return false;
-    }
-*/        
+      
 }
 ?>
