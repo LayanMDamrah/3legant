@@ -1,5 +1,6 @@
 <?php
-require_once("tools.php");
+require_once("./php/tools.php");
+
 
 if (!isset($_GET['order_code'])) {
     echo "Order code is missing.";
@@ -21,8 +22,8 @@ if (!$result) {
     exit;
 }
 
-// Redirect to bill.html with GET parameters
-$url = "bill.html"
+// Redirect to bill.php with GET parameters
+$url = "bill.php"
      . "?code=" . urlencode($result['Order_Code'])
      . "&date=" . urlencode($result['Date'])
      . "&total=" . urlencode($result['Total'])

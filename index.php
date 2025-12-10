@@ -1,3 +1,6 @@
+<?php
+session_start()
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,10 +25,13 @@
 </head>
 
 <body>
+    <?php
+    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    ?>
  <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
-            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.html">3legant</a>
+            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -35,30 +41,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto  mb-2 mb-lg-0 d-flex gap-4">
                     <li class="nav-item px-5">
-                        <a class="nav-link active" href="./index.html">Home</a>
+                        <a class="nav-link active" href="./index.php">Home</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./shop.html">Shop</a>
+                        <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.html">Product</a>
+                        <a class="nav-link" href="./products.php">Product</a>
                     </li>
                   
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
                   
-                    <a href="./user.html" class="btn btn-link nav-icon p-0">
+                    <a href="./user.php" class="btn btn-link nav-icon p-0">
                         
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
-                    <a href="./cart.html" class="btn btn-link nav-icon p-0">
+                    <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
                     <div id="auth-buttons" class="d-flex align-items-center gap-3">
-                        <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.html">Login</a>
-                        </button>
+                        <button class="btn btn-dark" id="login-btn">Login</button>
                         <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
                     </div>
                 </div>
@@ -126,8 +130,12 @@
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Loveseat Sofa</h5>
                             <span class="paragraph">$199.0</span>
-                            <button onclick="window.location.href='cart.html'" class="btn btn-dark mt-auto w-100">Add to
-                                cart</button>
+                            <form action="php/add-to-cart.php" method="POST">
+                                <input type="hidden" name="product_id" value="1">
+                                <input type="hidden" name="product_price" value="199.0">
+                                <input type="hidden" name="product_qty" value="1" id="product-qty-1">
+                                <button class="btn btn-dark mt-auto w-100">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -139,9 +147,12 @@
                         <div class="card-body">
                             <h5 class="card-title Heading-4"> Luxury Sofa</h5>
                             <span class="paragraph">$299.0</span>
-                            <button onclick="window.location.href='cart.html'" class="btn btn-dark mt-auto w-100">Add to
-                                cart</button>
-
+                            <form action="php/add-to-cart.php" method="POST">
+                                <input type="hidden" name="product_id" value="2">
+                                <input type="hidden" name="product_price" value="299.0">
+                                <input type="hidden" name="product_qty" value="1" id="product-qty-2">
+                                <button class="btn btn-dark mt-auto w-100">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -153,8 +164,12 @@
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Table Lamp</h5>
                             <span class="paragraph">$19.0</span>
-                            <button onclick="window.location.href='cart.html'" class="btn btn-dark mt-auto w-100">Add to
-                                cart</button>
+                            <form action="php/add-to-cart.php" method="POST">
+                                <input type="hidden" name="product_id" value="3">
+                                <input type="hidden" name="product_price" value="19.0">
+                                <input type="hidden" name="product_qty" value="1" id="product-qty-3">
+                                <button class="btn btn-dark mt-auto w-100">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -166,8 +181,12 @@
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Cozy Sofa</h5>
                             <span class="paragraph">$299.0</span>
-                            <button onclick="window.location.href='cart.html'" class="btn btn-dark mt-auto w-100">Add to
-                                cart</button>
+                            <form action="php/add-to-cart.php" method="POST">
+                                <input type="hidden" name="product_id" value="4">
+                                <input type="hidden" name="product_price" value="299.0">
+                                <input type="hidden" name="product_qty" value="1" id="product-qty-4">
+                                <button class="btn btn-dark mt-auto w-100">Add to cart</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -242,9 +261,9 @@
 
                 <div class="footer-col">
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a>
                         </div>
                        
 
@@ -262,9 +281,9 @@
 
     <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Link JS file here -->
-    <script src="assets/js/main.js"></script>
+    <script src="./assets/js/main.js"></script>
     <script src="./assets/js/entery.js"></script>
-
+    
 </body>
 
 </html>
