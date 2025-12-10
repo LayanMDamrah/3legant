@@ -3,7 +3,7 @@ class Database{
     private static $db_server = "localhost";
     private static $db_user = "root";
     private static $db_pass = "";
-    private static $db_name = "projectdb";
+    private static $db_name = "project_data";
 
     private static $conn = null;
 

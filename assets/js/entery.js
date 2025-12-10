@@ -16,27 +16,89 @@ if (errorParam === "alreadyused") {
     document.getElementById("alreadyused").hidden = false;
 }
 
-// Check if login was successful via URL
+// =====================================
+//  HANDLE LOGIN ERRORS
+// =====================================
 const param = new URLSearchParams(window.location.search);
-if (param.get("success") === "1") {
-    // Mark user as logged in
+const errorParams = param.get("error");
+
+if (errorParams) {
+    const incorrectMsg = document.getElementById("incorrect");
+    if (incorrectMsg) incorrectMsg.hidden = false;
+}
+
+// username invalid
+if (errorParams === "invalid") {
+    const invalid = document.getElementById("invalid");
+    if (invalid) invalid.hidden = false;
+}
+
+// already used
+if (errorParams === "alreadyused") {
+    const used = document.getElementById("alreadyused");
+    if (used) used.hidden = false;
+}
+
+// login success
+const success = new URLSearchParams(window.location.search).get("success");
+
+if (success === "1") {
     localStorage.setItem("userLoggedIn", "true");
 }
 
-// Toggle login/logout buttons
+// show/ hide login and logout buttons
 const loginBtn = document.getElementById("login-btn");
 const logoutBtn = document.getElementById("logout-btn");
 
-if (localStorage.getItem("userLoggedIn")) {
-    loginBtn.hidden = true;
-    logoutBtn.hidden = false;
+// Handle login button click
+if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+        window.location.href = "login.php";
+    });
 }
 
-logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("userLoggedIn");
-    loginBtn.hidden = false;
-    logoutBtn.hidden = true;
+if (localStorage.getItem("userLoggedIn") === "true") {
+    if (loginBtn) loginBtn.hidden = true;
+    if (logoutBtn) logoutBtn.hidden = false;
+} else {
+    if (loginBtn) loginBtn.hidden = false;
+    if (logoutBtn) logoutBtn.hidden = true;
+}
 
-    // Optionally, redirect to home page after logout
-    window.location.href = "login.html";
+
+
+
+//  Logout 
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("userLoggedIn");
+        window.location.href = "login.php";
+    });
+}
+
+
+// block everything before logingin
+document.addEventListener("DOMContentLoaded", () => {
+    const loggedIn = localStorage.getItem("userLoggedIn") === "true";
+
+    if (!loggedIn) {
+        const protectedElements = document.querySelectorAll("a, button, img");
+
+        protectedElements.forEach(el => {
+            el.addEventListener("click", (e) => {
+
+                // allow form submission
+                if (el.type === "submit") return;
+
+                // allow login button (navbar)
+                if (el.id === "login-btn") return;
+
+                // allow signup 
+                if (el.id === "signup-btn") return;
+
+                e.preventDefault();
+                window.location.href = "login.php";
+            });
+        });
+    }
 });

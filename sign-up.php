@@ -1,3 +1,55 @@
+<?php
+session_start();
+require_once("./php/tools.php");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    $name = $_POST["name"];
+    $age = $_POST["age"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    if (empty($name) || empty($email) || empty($password) || $age <= 0) {
+        header("Location: sign-up.php?error=invalid");
+        exit();
+    }
+
+    $conn = Database::connect();
+
+    // Check if email exists
+    $check = $conn->prepare("SELECT Email FROM account WHERE Email=?");
+    $check->bind_param("s", $email);
+    $check->execute();
+    $result = $check->get_result();
+
+    if ($result->num_rows > 0) {
+        // Email already used
+        header("Location: sign-up.php?error=alreadyused");
+        exit();
+    }
+
+    // Insert new user (pending approval)
+    $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+    $role = "user";
+    $photo = "default.jpg";
+    $status = "pending";
+
+    $sql = "INSERT INTO account (Name, Email, Age, Role, Password, Photo, Status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssissss", $name, $email, $age, $role, $hashed, $photo, $status);
+
+    if ($stmt->execute()) {
+        $_SESSION["username"] = $name; // log in server-side
+        header("Location: index.php?success=1");
+        exit();
+    } else {
+        header("Location: sign-up.php");
+        exit();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +72,9 @@
 </head>
 
 <body>
-
+    <?php
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
+    ?>
 
     <section class="SignUp">
         <div class="container-fluid">
@@ -34,12 +88,12 @@
                         <p class="Heading-1">
                             Sign Up
                         </p>
-                        <p class="Heading-5 mb-4">Already have an account?<a href="./login.html"
+                        <p class="Heading-5 mb-4">Already have an account?<a href="login.php"
                                 class="green text-decoration-none "> Login</a></p>
                     </div>
 
                     <!-- input form -->
-                    <form action="./php/signup.php" method="POST" class="p-4 border-0 rounded">
+                    <form action="sign-up.php" method="POST" class="p-4 border-0 rounded">
 
                         <!-- Name -->
                         <div class="mb-3">
@@ -68,7 +122,7 @@
 
                         <!-- Button full width -->
                         <button type="submit" name="register" value="register" class="btn btn-dark w-100">
-                           Sign Up
+                            Sign Up
                         </button>
 
                     </form>
