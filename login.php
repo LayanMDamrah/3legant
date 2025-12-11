@@ -1,3 +1,62 @@
+<?php
+session_start();
+require_once("./php/tools.php");
+
+$conn = Database::connect();
+
+// Handle login form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $errors = [];
+
+    if (empty($username)) {
+        $errors[] = "username";
+    }
+
+    if (empty($password)) {
+        $errors[] = "password";
+    }
+
+    // Check username
+    if (empty($errors)) {
+        $query = $conn->prepare("SELECT * FROM account WHERE Name = ?");
+        $query->bind_param("s", $username);
+        $query->execute();
+        $result = $query->get_result();
+        $user = $result->fetch_assoc();
+
+        // Try email if username not found
+        if (!$user) {
+            $query = $conn->prepare("SELECT * FROM account WHERE Email = ?");
+            $query->bind_param("s", $username);
+            $query->execute();
+            $result = $query->get_result();
+            $user = $result->fetch_assoc();
+
+            if (!$user) {
+                $errors[] = "username";
+            }
+        }
+
+        // Check password
+        if ($user && !password_verify($password, $user["Password"])) {
+            $errors[] = "password";
+        }
+    }
+
+    if (!empty($errors)) {
+        // Redirect with error
+        header("Location: login.php?error=" . implode(",", $errors));
+        exit();
+    }
+
+    // Save session and redirect to index
+    $_SESSION["username"] = $username;
+    header("Location: index.php?success=1");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,7 +79,9 @@
 </head>
 
 <body>
-
+    <?php
+    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    ?>
 
     <section class="login">
         <div class="container-fluid">
@@ -34,11 +95,11 @@
                         <p class="Heading-1">
                             Login
                         </p>
-                        <p class="Heading-5 mb-4">Don’t have an accout yet?<a href="./sign-up.html" class="green text-decoration-none "> Sign Up</a></p>
+                        <p class="Heading-5 mb-4">Don’t have an accout yet?<a href="sign-up.php" id="signup-btn" class="green text-decoration-none "> Sign Up</a></p>
                     </div>
 
                     <!-- input form -->
-                    <form action="./php/login.php" method="POST" class="p-4 border-0 rounded">
+                    <form action="login.php" method="POST" class="p-4 border-0 rounded">
 
                         <div class="mb-4">
 
@@ -76,4 +137,5 @@
     <script src="assets/js/entery.js"></script>
 </body>
 
-</html>                      
+</html>          
+        

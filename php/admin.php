@@ -67,12 +67,12 @@ class Admin
         if ($result->num_rows > 0) {
             // Email already used → reject
             Admin::rejectUser($email);
-            header("Location: ../sign-up.html?error=alreadyused");
+            header("Location: ../sign-up.php?error=alreadyused");
             exit();
         } else {
             // Email not found → approve
             Admin::approveUser($email);
-            header("Location: ../index.html");
+            header("Location: ../index.php");
             exit();
         }
     }

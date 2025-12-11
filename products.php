@@ -1,3 +1,25 @@
+<?php
+session_start();
+require_once("php/tools.php");
+
+if (!isset($_GET['id'])) {
+    echo "No product selected.";
+    exit;
+}
+$product_id = (int)$_GET['id'];
+
+
+$conn = Database::connect();
+
+$sql = "SELECT * FROM product WHERE ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$product = $result->fetch_assoc();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,11 +44,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
+
 <body>
+    <?php
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
+    ?>
     <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
-            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.html">3legant</a>
+            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -36,33 +62,29 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto  mb-2 mb-lg-0 d-flex gap-4">
                     <li class="nav-item px-5">
-                        <a class="nav-link active" href="./index.html">Home</a>
+                        <a class="nav-link active" href="./index.php">Home</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./shop.html">Shop</a>
+                        <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.html">Product</a>
+                        <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./contuctus.html">Contact Us</a>
-                    </li>
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                    <button class="btn btn-link nav-icon p-0">
-                        <img src="./assets/imgs/icons/interface/outline/search 02.svg" alt="Search">
-                    </button>
-                    <a href="./user.html" class="btn btn-link nav-icon p-0">
+
+                    <a href="./user.php" class="btn btn-link nav-icon p-0">
 
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
-                    <a href="./cart.html" class="btn btn-link nav-icon p-0">
+                    <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
                     <div id="auth-buttons" class="d-flex align-items-center gap-3">
                         <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.html">Login</a>
+                            <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
                         <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
                     </div>
@@ -71,8 +93,6 @@
         </div>
     </nav>
 
-
-    <!--Hero-->
 
     <!--Products iteam-->
     <section class="m-5">
@@ -95,19 +115,27 @@
 
                     <!-- Image -->
                     <div class="col-12 col-sm-12 col-md-6 mb-3 mb-md-0 h-100">
-                        <img src="./assets/imgs/detalisPage/Product_detalis.webp" alt="Tray Table"
+                        <img
+                            src="./assets/imgs/productsPage/Productsiteam/<?php echo $product['Photo']; ?>"
+                            alt="<?php echo htmlspecialchars($product['Name']); ?>"
                             class="img-fluid h-100 w-100 object-fit-cover">
                     </div>
 
                     <!-- Text -->
                     <div class="col-12 col-sm-12 col-md-6 h-100">
                         <div class="d-flex flex-column h-100 justify-content-between">
-                            <h5 class="Heading-5 heading_scale">Tray Table</h5>
+                            <h5 class="Heading-5 heading_scale">
+                                <?php echo htmlspecialchars($product['Name']); ?>
+                            </h5>
+
                             <p class="paragraph o4 description">
-                                Buy one or buy a few and make every space where you sit more convenient.
-                                Light and easy to move around with removable tray top, handy for serving snacks.
+                                <?php echo nl2br(htmlspecialchars($product['Description'])); ?>
                             </p>
-                            <span class="Heading-5 price_scale">$199.00</span>
+
+                            <span class="Heading-5 price_scale">
+                                $<?php echo number_format($product['Price'], 2); ?>
+                            </span>
+
                         </div>
                         <hr class="border border-dark border-1">
                         <!--offer time section-->
@@ -150,33 +178,25 @@
                         <!--button section-->
                         <div class="container-fluid">
                             <div class="row align-items-center g-3">
+                                <div class="d-flex justify-content-between align-items-center border rounded p-2" style="width:120px;">
+                                    <button type="button" id="dec-btn" class="btn btn-sm fw-bold">-</button>
+                                    <span id="qty-display">1</span>
+                                    <button type="button" id="inc-btn" class="btn btn-sm fw-bold">+</button>
+                                </div>
 
-                                <!-- Quantity selector -->
-
-                                <!-- form -->
-                                <form id="quantity-form" action="php/product.php" method="POST"
-                                    class="d-flex align-items-center">
-
-                                    <!-- Hidden fields required by PHP -->
-                                    <input type="hidden" name="product_id" value="1"> <!-- Change to real ID -->
-                                    <input type="hidden" name="action" id="action-input" value="">
-
-                                    <div class="col-4">
-                                        <div class="d-flex justify-content-between align-items-center border rounded p-2"
-                                            style="width:120px;">
-                                            <button type="button" id="dec-btn" class="btn btn-sm fw-bold">-</button>
-                                            <span id="qty-display" class="fw-bold">1</span>
-                                            <button type="button" id="inc-btn" class="btn btn-sm fw-bold">+</button>
-                                        </div>
-                                    </div>
+                                <form action="php/add-to-cart.php" method="POST" id="add-to-cart-form">
+                                    <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                                    <input type="hidden" name="product_price" value="<?php echo $product['Price']; ?>">
+                                    <input type="hidden" name="product_qty" value="1" id="add-to-cart-qty">
+                                    <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                                 </form>
 
 
-                                <!-- Add to cart -->
-                                <div class="col-8">
-                                    <button onclick="window.location.href='cart.html'" class="btn btn-dark w-100"
-                                        style="padding:0.71rem;">Add to cart</button>
-                                </div>
+
+
+
+
+
 
                             </div>
                         </div>
@@ -187,7 +207,7 @@
         </section>
         <!-- Footer -->
         <footer class="custom-footer mt-5">
-            <div class="container">
+            <div>
                 <div class="footer-row">
 
                     <div class="footer-col ">
@@ -196,12 +216,11 @@
 
                     <div class="footer-col">
                         <div class="row">
-                            <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
-                            <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
-                            <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a>
+                            <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
+                            <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
+                            <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a>
                             </div>
-                            <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact
-                                    Us</a></div>
+
 
                         </div>
                     </div>
@@ -216,8 +235,43 @@
 
         <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Link JS file here -->
-        <script src="assets/js/counter.js"></script>
         <script src="./assets/js/entery.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let qty = 1;
+
+                const decBtn = document.getElementById('dec-btn');
+                const incBtn = document.getElementById('inc-btn');
+                const qtyDisplay = document.getElementById('qty-display');
+                const qtyInput = document.getElementById('add-to-cart-qty');
+                const addToCartForm = document.getElementById('add-to-cart-form');
+
+                // Function to sync span and hidden input
+                function updateQty() {
+                    qtyDisplay.textContent = qty;
+                    qtyInput.value = qty;
+                }
+
+                decBtn.addEventListener('click', () => {
+                    if (qty > 1) qty--;
+                    updateQty();
+                });
+
+                incBtn.addEventListener('click', () => {
+                    qty++;
+                    updateQty();
+                });
+
+                // This is the crucial part: ensure the latest quantity is sent
+                addToCartForm.addEventListener('submit', (e) => {
+                    updateQty(); // must run right before submit
+                });
+
+                // Initialize
+                updateQty();
+            });
+        </script>
+
 
 </body>
 

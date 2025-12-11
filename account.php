@@ -1,3 +1,6 @@
+<?php
+session_start()
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,10 +27,13 @@
 </head>
 
 <body>
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light px-4 ">
+    <?php
+    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    ?>
+   <!-- navbar -->
+   <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
-            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.html">3legant</a>
+            <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -37,17 +43,15 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mx-auto  mb-2 mb-lg-0 d-flex gap-4">
                     <li class="nav-item px-5">
-                        <a class="nav-link active" href="./home.html">Home</a>
+                        <a class="nav-link active" href="./index.php">Home</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./shop.html">Shop</a>
+                        <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
                     <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.html">Product</a>
+                        <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./contuctus.html">Contact Us</a>
-                    </li>
+                  
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
@@ -55,15 +59,15 @@
                         <img src="./assets/imgs/icons/interface/outline/search 02.svg" alt="Search">
                     </button>
                     <a href="./user.html" class="btn btn-link nav-icon p-0">
-
+                        
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
-                    <button class="btn btn-link nav-icon p-0">
+                    <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
-                    </button>
+                    </a>
                     <div id="auth-buttons" class="d-flex align-items-center gap-3">
                         <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.html">Login</a>
+                            <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
                         <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
                     </div>
@@ -96,7 +100,7 @@
 
                             <ul class="menu">
                                 <li><a href="cart.html">Cart</a></li>
-                                <li><a href="login.html">Log Out</a></li>
+                                <li><a href="#">Log Out</a></li>
                             </ul>
                         </div>
                     </form>
@@ -137,14 +141,36 @@
                                         <th width="20%">User Name</th>
                                         <th width="10%">Age</th>
                                         <th width="25%">Email</th>
+                                        <th width="15%">Password</th>
                                         <th width="10%">Delete</th>
                                         <th width="10%">Update</th>
-                                        <th width="15%">Change Password</th>
                                     </tr>
                                 </thead>
 
                                 <tbody id="users_table_body">
-                                    <!-- ← هنا PHP سيدخل اليوزرز من قاعدة البيانات -->
+                                    <form>
+                                     <!-- ← Loop over all users -->
+                                        <tr>
+                                             <!-- ← هنا PHP سيدخل اليوزرز من قاعدة البيانات -->
+                                             <!--user name-->
+                                              <td><span>Sofia Havertz</span></td>
+                                             <!--user age-->
+                                              <td><span>35</span></td>
+                                             <!--user email-->
+                                              <td><span>sofia@gmail.com</span></td>
+                                             <!--user password-->
+                                              <td><span>sofia123</span></td>
+
+                                            <td>
+                                                <button class="btn btn-danger btn-sm">Delete </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-warning btn-sm">Update</button>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -175,11 +201,9 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a>
-                        </div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a>
-                        </div>
-
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a></div>
+                       
                     </div>
                 </div>
 

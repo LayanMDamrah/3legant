@@ -107,6 +107,7 @@ if ($product_id && $action) {
 }
 
 echo json_encode(["quantity" => $newQty]);
+
 exit();
 
 ?>
