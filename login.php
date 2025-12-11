@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // Check password
-        if ($user && !password_verify($password, $user["Password"])) {
+        if ($user && $password !== $user["Password"]) {
             $errors[] = "password";
         }
     }
@@ -80,13 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
 
     <section class="login">
         <div class="container-fluid">
             <div class="row">
-    <div class="col-12 col-lg-6">
+                <div class="col-12 col-lg-6">
                     <img src="./assets/imgs/public/login-img.webp" class=" login-img " alt="">
                 </div>
 
@@ -137,5 +137,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="assets/js/entery.js"></script>
 </body>
 
-</html>          
-        
+</html>

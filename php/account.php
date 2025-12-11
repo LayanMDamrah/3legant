@@ -26,11 +26,11 @@ class Account{
     static function setUserPassword($user_id, $new_pass){
         $conn = Database::connect();
 
-        $hash = password_hash($new_pass, PASSWORD_DEFAULT);
+       // $hash = password_hash($new_pass, PASSWORD_DEFAULT);
 
         $sql="UPDATE user SET Password = ? WHERE User_ID = ?";
         $query = $conn->prepare($sql); 
-        $query->bind_param("si", $hash, $user_id);
+        $query->bind_param("si", $new_pass, $user_id);
 
         return $query->execute();
     }
