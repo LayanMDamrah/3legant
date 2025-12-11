@@ -1,4 +1,4 @@
-/* list style */
+    /* list style */
 .profile-card {
     width: 260px;
     background: #f7f9fb;
@@ -53,70 +53,21 @@
 .menu li a:hover {
     color: #000;
 }
-
-/* detalis style */
-
+    
+    
+    
 .account-container {
-    width: 100%;
-    max-width: 600px;
-    margin: 20px auto;
-    font-family: Arial, sans-serif;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 12px rgba(0,0,0,0.08);
 }
 
-h2 {
-    margin-bottom: 20px;
-    font-size: 22px;
+table th {
+    background: #f3f3f3;
     font-weight: 600;
-}
-
-.info-box p {
-    margin: 8px 0;
-    font-size: 16px;
-}
-
-.edit-btn, .save-btn {
-    padding: 10px 20px;
-    background: #000000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 15px;
-}
-
-/* .edit-btn:hover, .save-btn:hover {
-    background: #000000;
-} */
-
-.edit-form {
-    margin-top: 25px;
 }
 
 .hidden {
     display: none;
-}
-
-label {
-    display: block;
-    margin: 15px 0 5px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.note {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 15px;
-    font-size: 13px;
-    color: #666;
 }

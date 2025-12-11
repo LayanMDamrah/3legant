@@ -19,7 +19,7 @@ session_start()
     <!-- main css -->
     <link rel="stylesheet" href="./assets/css/main.css">
     <!--account.css-->
-    <link rel="stylesheet" href="./assets/css/account.css">
+    <link rel="stylesheet" href="./assets/css/user.css">
 
     <!-- bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -136,6 +136,9 @@ session_start()
 
                                 <label>EMAIL *</label>
                                 <input type="email" name="email" placeholder="Email">
+
+                                <label>PASSWORD *</label>
+                                <input type="password" name="password" placeholder="Password">
 
                                 <label>PROFILE IMAGE</label>
                                 <input type="file" name="profile_image" accept="image/*">

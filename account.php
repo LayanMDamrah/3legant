@@ -25,6 +25,7 @@ session_start()
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
+
 <body>
     <?php
     if(isset($_SESSION['username']) && isset($_SESSION['password']))
@@ -54,8 +55,10 @@ session_start()
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                  
-                    <a href="./user.php" class="btn btn-link nav-icon p-0">
+                    <button class="btn btn-link nav-icon p-0">
+                        <img src="./assets/imgs/icons/interface/outline/search 02.svg" alt="Search">
+                    </button>
+                    <a href="./user.html" class="btn btn-link nav-icon p-0">
                         
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
@@ -96,7 +99,7 @@ session_start()
                             <hr class="divider">
 
                             <ul class="menu">
-                                <li><a href="cart.php">Cart</a></li>
+                                <li><a href="cart.html">Cart</a></li>
                                 <li><a href="#">Log Out</a></li>
                             </ul>
                         </div>
@@ -112,43 +115,71 @@ session_start()
                         <form>
                             <div class="info-box">
                                 <!--should receive from php-->
-                                <p><strong>Name:</strong> <span >Sofia</span></p>
+                                <p><strong>Name:</strong> <span>Sofia</span></p>
                                 <!--should receive from php-->
-                                <p><strong>age:</strong> <span >Havertz</span></p>
+                                <p><strong>age:</strong> <span>Havertz</span></p>
                                 <!--should receive from php-->
-                                <p><strong>Email:</strong> <span >sofia@gmail.com</span></p>
+                                <p><strong>Email:</strong> <span>sofia@gmail.com</span></p>
 
                             </div>
                         </form>
 
-                        <button id="editBtn" class="edit-btn">Change Details</button>
+                        <button id="editBtn" class="btn btn-dark my-3">View Users</button>
 
 
-                        <!-- EDIT FORM (HIDDEN INITIALLY) -->
-                        <div id="editForm" class="edit-form hidden">
-                            <h2>Account Details</h2>
-                            <form action="" method="POST" enctype="multipart/form-data">
-                                <label>NAME *</label>
-                                <input type="text" name="name" placeholder="Name">
+                        <!-- Users Table (Initially Hidden) -->
+                        <div id="editForm" class="account-container hidden">
 
-                                <label>AGE *</label>
-                                <input type="text" name="age" placeholder="Age">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h3>Users</h3>
+                                <button class="btn btn-dark" id="addUserBtn">Add New User</button>
+                            </div>
 
-                                <label>EMAIL *</label>
-                                <input type="email" name="email" placeholder="Email">
+                            <table class="table table-bordered table-hover text-center align-middle">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">User Name</th>
+                                        <th width="10%">Age</th>
+                                        <th width="25%">Email</th>
+                                        <th width="15%">Password</th>
+                                        <th width="10%">Delete</th>
+                                        <th width="10%">Update</th>
+                                    </tr>
+                                </thead>
 
-                                <label>PROFILE IMAGE</label>
-                                <input type="file" name="profile_image" accept="image/*">
+                                <tbody id="users_table_body">
+                                    <form>
+                                     <!-- ← Loop over all users -->
+                                        <tr>
+                                             <!-- ← هنا PHP سيدخل اليوزرز من قاعدة البيانات -->
+                                             <!--user name-->
+                                              <td><span>Sofia Havertz</span></td>
+                                             <!--user age-->
+                                              <td><span>35</span></td>
+                                             <!--user email-->
+                                              <td><span>sofia@gmail.com</span></td>
+                                             <!--user password-->
+                                              <td><span>sofia123</span></td>
 
-                                <button class="save-btn">Admin cheak</button>
-                            </form>
+                                            <td>
+                                                <button class="btn btn-danger btn-sm">Delete </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-warning btn-sm">Update</button>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                    
+                                </tbody>
+                            </table>
                         </div>
 
                     </div>
-                    <!--to show the forms i should write to change information-->
+
                     <script>
                         document.getElementById("editBtn").addEventListener("click", function () {
-                        document.getElementById("editForm").classList.toggle("hidden");
+                            document.getElementById("editForm").classList.toggle("hidden");
                         });
                     </script>
 
@@ -168,9 +199,10 @@ session_start()
 
                 <div class="footer-col">
                     <div class="row">
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a></div>
+                        <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a></div>
                        
                     </div>
                 </div>
