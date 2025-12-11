@@ -147,16 +147,16 @@ if ($result && $result->num_rows > 0) {
 
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h3>Users</h3>
-                                <button class="btn btn-dark" id="addUserBtn">Add New User</button>
                             </div>
 
                             <table class="table table-bordered table-hover text-center align-middle">
                                 <thead>
                                     <tr>
-                                        <th width="20%">User Name</th>
+                                        <th width="15%">User Name</th>
                                         <th width="10%">Age</th>
-                                        <th width="25%">Email</th>
+                                        <th width="20%">Email</th>
                                         <th width="15%">Password</th>
+                                        <th width="10%">Photo</th>
                                         <th width="10%">Update</th>
                                         <th width="10%">Delete</th>
                                     </tr>
@@ -169,6 +169,7 @@ if ($result && $result->num_rows > 0) {
                                         <td class="view"><?= (int)$user['Age']; ?></td>
                                         <td class="view"><?= htmlspecialchars($user['Email']); ?></td>
                                         <td class="view"><?= htmlspecialchars($user['Password']); ?></td>
+                                        <td class="view"><?= htmlspecialchars($user['Photo']); ?></td>
 
                                         <!-- Actions -->
                                         <td class="view">
@@ -185,6 +186,7 @@ if ($result && $result->num_rows > 0) {
                                                 <input type="number" name="age" value="<?= (int)$user['Age']; ?>" class="form-control" placeholder="Age">
                                                 <input type="email" name="email" value="<?= htmlspecialchars($user['Email']); ?>" class="form-control" placeholder="Email">
                                                 <input type="text" name="password" value="<?= htmlspecialchars($user['Password']); ?>" class="form-control" placeholder="Password">
+                                                <input type="text" name="photo" value="<?= htmlspecialchars($user['Photo']); ?>" class="form-control" placeholder="Photo Name">
                                                 <button type="submit" class="btn btn-success btn-sm">Save</button>
                                             </form>
                                         </td>
@@ -195,9 +197,27 @@ if ($result && $result->num_rows > 0) {
                                                 <button class="btn btn-danger btn-sm">Delete</button>
                                             </form>
                                         </td>
+                                        
 
                                         </tr>
                                     <?php endforeach; ?>
+                                    <tr>
+                                        <button id="show-form-btn" class="btn btn-primary" >Add New User</button>
+                                            <div id="user-form" class="d-none mt-3">
+                                                <form method="POST" action="./php/admin.php" class="d-flex gap-3 align-items-center">
+                                                    <input type="hidden" name="create_new_user" value="1">
+
+                                                    <input type="text" name="name" class="form-control" placeholder="Name" required>
+                                                    <input type="number" name="age" class="form-control" placeholder="Age" required>
+                                                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                                    <input type="text" name="password" class="form-control" placeholder="Password" required>
+                                                    <input type="text" name="photo" class="form-control" placeholder="Photo Name">
+
+                                                    <button type="submit" class="btn btn-success">Add New User</button>
+                                                </form>
+                                            </div>
+
+                                        </tr>
                                 </tbody>
 
                             </table>
@@ -249,21 +269,25 @@ if ($result && $result->num_rows > 0) {
     <script src="assets/js/main.js"></script>
     <script src="./assets/js/entery.js"></script>
     <script>
-document.querySelectorAll('.edit-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        const row = this.closest('tr');
-        const viewCells = row.querySelectorAll('.view');
-        const editCell = row.querySelector('.edit');
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const viewCells = row.querySelectorAll('.view');
+                const editCell = row.querySelector('.edit');
 
-        // Hide read-only cells
-        viewCells.forEach(cell => cell.style.display = 'none');
+                // Hide read-only cells
+                viewCells.forEach(cell => cell.style.display = 'none');
 
-        // Show editable form
-        editCell.style.display = 'table-cell';
-    });
+                // Show editable form
+                editCell.style.display = 'table-cell';
+            });
+        });
+    </script>
+    <script>
+document.getElementById("show-form-btn").addEventListener("click", function () {
+    document.getElementById("user-form").classList.remove("d-none");
 });
 </script>
-
 
 </body>
 
