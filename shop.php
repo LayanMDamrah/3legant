@@ -89,7 +89,9 @@ session_start()
                 <!--card1-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Loveseat sofa.webp" class="card-img-top" alt="Loveseat sofa">
+                        <a href="products.php?id=1">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Loveseat sofa.webp" class="card-img-top" alt="Loveseat sofa">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Loveseat Sofa</h5>
                             <span class="paragraph">$199.0</span>
@@ -105,7 +107,9 @@ session_start()
                 <!--card2-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Luxury Sofa.webp" class="card-img-top" alt="Luxury Sofa">
+                        <a href="products.php?id=2">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Luxury Sofa.webp" class="card-img-top" alt="Luxury Sofa">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4"> Luxury Sofa</h5>
                             <span class="paragraph">$299.0</span>
@@ -121,7 +125,9 @@ session_start()
                 <!--card3-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Table lamp.webp" class="card-img-top" alt="Table lamp">
+                        <a href="products.php?id=3">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Table lamp.webp" class="card-img-top" alt="Table lamp">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Table Lamp</h5>
                             <span class="paragraph">$19.0</span>
@@ -137,7 +143,9 @@ session_start()
                 <!--card4-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Cozy_sofa.webp" class="card-img-top" alt="Cozy_sofa">
+                        <a href="products.php?id=4">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Cozy_sofa.webp" class="card-img-top" alt="Cozy_sofa">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Cozy Sofa</h5>
                             <span class="paragraph">$299.0</span>
@@ -157,7 +165,9 @@ session_start()
                 <!--card1-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/White Drawer unit.webp" class="card-img-top" alt="White Drawer unit">
+                        <a href="products.php?id=5">
+                            <img src="./assets/imgs/productsPage/Productsiteam/White Drawer unit.webp" class="card-img-top" alt="White Drawer unit">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4">White Drawer unit</h5>
                             <span class="paragraph">$89.99</span>
@@ -173,9 +183,10 @@ session_start()
                 <!--card2-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <a href="./products.php">
+                        <a href="products.php?id=6">
                             <img src="./assets/imgs/productsPage/Productsiteam/Black Tray table.webp" class="card-img-top" alt="Black Tray table">
                         </a>
+
                         <div class="card-body">
                             <h5 class="card-title Heading-4"> Black Tray table</h5>
                             <span class="paragraph">$19.99</span>
@@ -191,7 +202,9 @@ session_start()
                 <!--card3-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Table lamp2.webp" class="card-img-top" alt="Table lamp">
+                        <a href="products.php?id=7">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Table lamp2.webp" class="card-img-top" alt="Table lamp">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4">Table Lamp</h5>
                             <span class="paragraph">$19.0</span>
@@ -200,14 +213,16 @@ session_start()
                                 <input type="hidden" name="product_price" value="19.0">
                                 <input type="hidden" name="product_qty" value="1" id="product-qty-7">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
-                            </form>
+                                </form>
                         </div>
                     </div>
                 </div>
                 <!--card4-->
                 <div class="col-xs-12 col-6 col-md-4 col-lg-3">
                     <div class="card h-100 d-flex flex-column">
-                        <img src="./assets/imgs/productsPage/Productsiteam/Black Brow Side table.webp" class="card-img-top" alt="Black Brow Side table">
+                        <a href="products.php?id=8">
+                            <img src="./assets/imgs/productsPage/Productsiteam/Black Brow Side table.webp" class="card-img-top" alt="Black Brow Side table">
+                        </a>
                         <div class="card-body">
                             <h5 class="card-title Heading-4 ">Black Brow Side table</h5>
                             <span class="paragraph">$16.99</span>

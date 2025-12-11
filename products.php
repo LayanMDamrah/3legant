@@ -1,5 +1,24 @@
 <?php
-session_start()
+session_start();
+require_once("php/tools.php");
+
+if (!isset($_GET['id'])) {
+    echo "No product selected.";
+    exit;
+}
+$product_id = (int)$_GET['id'];
+
+
+$conn = Database::connect();
+
+$sql = "SELECT * FROM product WHERE ID = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$product = $result->fetch_assoc();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,12 +44,13 @@ session_start()
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
+
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
     <!-- navbar -->
-   <nav class="navbar navbar-expand-lg navbar-light px-4 ">
+    <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
             <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -50,13 +70,13 @@ session_start()
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                  
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                  
+
                     <a href="./user.php" class="btn btn-link nav-icon p-0">
-                        
+
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
@@ -95,19 +115,27 @@ session_start()
 
                     <!-- Image -->
                     <div class="col-12 col-sm-12 col-md-6 mb-3 mb-md-0 h-100">
-                        <img src="./assets/imgs/detalisPage/Product_detalis.webp" alt="Tray Table"
+                        <img
+                            src="./assets/imgs/productsPage/Productsiteam/<?php echo $product['Photo']; ?>"
+                            alt="<?php echo htmlspecialchars($product['Name']); ?>"
                             class="img-fluid h-100 w-100 object-fit-cover">
                     </div>
 
                     <!-- Text -->
                     <div class="col-12 col-sm-12 col-md-6 h-100">
                         <div class="d-flex flex-column h-100 justify-content-between">
-                            <h5 class="Heading-5 heading_scale">Tray Table</h5>
+                            <h5 class="Heading-5 heading_scale">
+                                <?php echo htmlspecialchars($product['Name']); ?>
+                            </h5>
+
                             <p class="paragraph o4 description">
-                                Buy one or buy a few and make every space where you sit more convenient.
-                                Light and easy to move around with removable tray top, handy for serving snacks.
+                                <?php echo nl2br(htmlspecialchars($product['Description'])); ?>
                             </p>
-                            <span class="Heading-5 price_scale">$199.00</span>
+
+                            <span class="Heading-5 price_scale">
+                                $<?php echo number_format($product['Price'], 2); ?>
+                            </span>
+
                         </div>
                         <hr class="border border-dark border-1">
                         <!--offer time section-->
@@ -174,8 +202,12 @@ session_start()
 
                                 <!-- Add to cart -->
                                 <div class="col-8">
-                                    <button onclick="window.location.href='cart.php'" class="btn btn-dark w-100"
-                                        style="padding:0.71rem;">Add to cart</button>
+                                    <form action="php/add-to-cart.php" method="POST">
+                                        <input type="hidden" name="product_id" value="6">
+                                        <input type="hidden" name="product_price" value="19.99">
+                                        <input type="hidden" name="product_qty" value="1" id="product-qty-6">
+                                        <button class="btn btn-dark mt-auto w-100">Add to cart</button>
+                                    </form>
                                 </div>
 
                             </div>
@@ -187,7 +219,7 @@ session_start()
         </section>
         <!-- Footer -->
         <footer class="custom-footer mt-5">
-            <div >
+            <div>
                 <div class="footer-row">
 
                     <div class="footer-col ">
@@ -200,7 +232,7 @@ session_start()
                             <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
                             <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a>
                             </div>
-                           
+
 
                         </div>
                     </div>

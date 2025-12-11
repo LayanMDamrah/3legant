@@ -47,9 +47,7 @@ foreach ($_SESSION['add-to-cart'] as $item) {
     $total += $item['sub_total'];
 }
 
-// ---------------------------------------------------
-// 3) Extract UPDATED qty + subtotal for THIS product
-// ---------------------------------------------------
+//UPDATED qty, subtotal 
 $updated_qty = 0;
 $updated_sub_total = 0;
 
