@@ -3,18 +3,6 @@ require_once("tools.php");
 
 class Product
 {
-    static function viewProduct($id)
-    {
-        $conn = Database::connect();
-
-        $sql = "SELECT * FROM product WHERE ID = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("i", $id);
-        $query->execute();
-
-        return $query->get_result()->fetch_assoc();
-    }
-
     static function getQuantity($product_id)
     {
         $conn = Database::connect();
@@ -23,20 +11,6 @@ class Product
         $q->bind_param("i", $product_id);
         $q->execute();
         return $q->get_result()->fetch_assoc()["Product_Quantity"];
-    }
-
-    static function addToCart($product_id, $product_quantity, $product_price)
-    {
-        $conn = Database::connect();
-
-        $sub_total = $product_quantity * $product_price;
-
-        $sql = "INSERT INTO cart (Product_Id, Product_Quantity, Product_Price, Total, Sub_Total) 
-                Values (?, ?, ?, ?, ?)";
-        $query = $conn->prepare($sql);
-        $query->bind_param("iidd", $product_id, $product_quantity, $product_price, $sub_total);
-
-        return $query->execute();
     }
 
     static function increaseQuantity($product_id, $amount = 1)
@@ -94,7 +68,7 @@ header("Content-Type: application/json");
 $product_id = $_POST["product_id"] ?? null;
 $action = $_POST["action"] ?? null;
 
-$newQty = null; // avoid undefined variable
+$newQty = null; 
 
 if ($product_id && $action) {
     if ($action === "increase") {

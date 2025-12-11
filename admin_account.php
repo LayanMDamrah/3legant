@@ -157,32 +157,44 @@ if ($result && $result->num_rows > 0) {
                                         <th width="10%">Age</th>
                                         <th width="25%">Email</th>
                                         <th width="15%">Password</th>
-                                        <th width="10%">Delete</th>
                                         <th width="10%">Update</th>
+                                        <th width="10%">Delete</th>
                                     </tr>
                                 </thead>
 
                                 <tbody id="users_table_body">
                                     <?php foreach ($users as $user): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($user['Name']); ?></td>
-                                            <td><?= number_format($user['Age']); ?></td>
-                                            <td><?= htmlspecialchars($user['Email']); ?></td>
-                                            <td><?= htmlspecialchars($user['Password']); ?></td>
+                                        <!-- Read-only view -->
+                                        <td class="view"><?= htmlspecialchars($user['Name']); ?></td>
+                                        <td class="view"><?= (int)$user['Age']; ?></td>
+                                        <td class="view"><?= htmlspecialchars($user['Email']); ?></td>
+                                        <td class="view"><?= htmlspecialchars($user['Password']); ?></td>
 
-                                            <td>
-                                                <form method="POST" action="./php/admin.php">
-                                                    <input type="hidden" name="user_id" value="<?= $user['User_ID']; ?>">
-                                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                                </form>
-                                            </td>
+                                        <!-- Actions -->
+                                        <td class="view">
+                                            <button type="button" class="btn btn-warning btn-sm edit-btn">Update</button>
+                                        </td>
 
-                                            <td>
-                                                <form method="GET" action="update_user.php">
-                                                    <input type="hidden" name="user_id" value="<?= $user['User_ID']; ?>">
-                                                    <button class="btn btn-warning btn-sm">Update</button>
-                                                </form>
-                                            </td>
+                                        <!-- Hidden editable form (initially hidden) -->
+                                        <td class="edit" style="display:none;" colspan="5">
+                                            <form method="POST" action="./php/admin.php" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
+                                                <input type="hidden" name="account_type" value="admin">
+                                                <input type="hidden" name="update_user_id" value="<?= $user['User_ID']; ?>">
+
+                                                <input type="text" name="name" value="<?= htmlspecialchars($user['Name']); ?>" class="form-control" placeholder="Name">
+                                                <input type="number" name="age" value="<?= (int)$user['Age']; ?>" class="form-control" placeholder="Age">
+                                                <input type="email" name="email" value="<?= htmlspecialchars($user['Email']); ?>" class="form-control" placeholder="Email">
+                                                <input type="text" name="password" value="<?= htmlspecialchars($user['Password']); ?>" class="form-control" placeholder="Password">
+                                                <button type="submit" class="btn btn-success btn-sm">Save</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="POST" action="./php/admin.php">
+                                                <input type="hidden" name="delete_user_id" value="<?= htmlspecialchars($user['User_ID']); ?>">
+                                                <input type="hidden" name="user_id" value="<?= $user['User_ID']; ?>">
+                                                <button class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </td>
 
                                         </tr>
                                     <?php endforeach; ?>
@@ -236,6 +248,22 @@ if ($result && $result->num_rows > 0) {
     <!-- Link JS file here -->
     <script src="assets/js/main.js"></script>
     <script src="./assets/js/entery.js"></script>
+    <script>
+document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const row = this.closest('tr');
+        const viewCells = row.querySelectorAll('.view');
+        const editCell = row.querySelector('.edit');
+
+        // Hide read-only cells
+        viewCells.forEach(cell => cell.style.display = 'none');
+
+        // Show editable form
+        editCell.style.display = 'table-cell';
+    });
+});
+</script>
+
 
 </body>
 

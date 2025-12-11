@@ -12,19 +12,19 @@ if ($payment_method) {
     // Assuming you already have total stored in session or calculate it
     $total = $_SESSION['cart_total'] ?? 0;
 
+    // Connect to database
     $conn = Database::connect();
 
     // Insert into your bill table
-    $stmt = $conn->prepare("INSERT INTO bill (payment_method, total, date) VALUES (?, ?, NOW())");
+    $stmt = $conn->prepare("INSERT INTO bill (Payment_Method, Total, Date) VALUES (?, ?, NOW())");
     $stmt->bind_param("sd", $payment_method, $total);
     $stmt->execute();
 
-    // Get inserted bill ID if needed
-    $bill_id = $stmt->insert_id;
+    // Get the auto-generated Order_Code
+    $order_code = $stmt->insert_id;
 
     $stmt->close();
     $conn->close();
-
 } else {
     echo "Please select a payment method!";
 }
@@ -58,11 +58,11 @@ if ($payment_method) {
 
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
-     <!-- navbar -->
+    <!-- navbar -->
 
-   <nav class="navbar navbar-expand-lg navbar-light px-4 ">
+    <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
             <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -82,16 +82,16 @@ if ($payment_method) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                  
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                  
+
                     <?php if ($_SESSION['role'] === 'admin') { ?>
                         <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
                             <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                         </a>
-                    <?php } else {?>
+                    <?php } else { ?>
                         <a href="./user_account.php" class="btn btn-link nav-icon p-0">
                             <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                         </a>
@@ -127,28 +127,28 @@ if ($payment_method) {
 
                     <!-- Order details -->
                     <form action="bill.php">
-                    <div class="text-start margin">
-                        <div class="d-flex mb-2">
-                            <span class="fw-semibold paragraph me-5 conectword">Order code:</span>
-                            <span id="orderCodeValue"></span>
-                        </div>
+                        <div class="text-start margin">
+                            <div class="d-flex mb-2">
+                                <span class="fw-semibold paragraph me-5 conectword">Order code:</span>
+                                <span id="orderCodeValue"><?php echo $order_code ?? 'N/A'; ?></span>
+                            </div>
 
-                        <div class="d-flex mb-2">
-                            <span class="fw-semibold paragraph me-5 conectword">Date:</span>
-                            <span id="orderDateValue"><?php echo date('Y-m-d'); ?></span>
-                        </div>
+                            <div class="d-flex mb-2">
+                                <span class="fw-semibold paragraph me-5 conectword">Date:</span>
+                                <span id="orderDateValue"><?php echo date('Y-m-d'); ?></span>
+                            </div>
 
-                        <div class="d-flex mb-2">
-                            <span class="fw-semibold paragraph me-5 conectword">Total:</span>
-                            <span id="orderTotalValue">$<?php echo number_format($_SESSION['cart_total'] ?? 0, 2); ?></span>
-                        </div>
+                            <div class="d-flex mb-2">
+                                <span class="fw-semibold paragraph me-5 conectword">Total:</span>
+                                <span id="orderTotalValue">$<?php echo number_format($_SESSION['cart_total'] ?? 0, 2); ?></span>
+                            </div>
 
-                        <div class="d-flex mb-4">
-                            <span class="fw-semibold paragraph me-5 conectword">Payment method:</span>
-                            <span id="orderPaymentValue"><?php echo htmlspecialchars($_SESSION['payment_method'] ?? 'Not selected'); ?></span>
-                        </div>
+                            <div class="d-flex mb-4">
+                                <span class="fw-semibold paragraph me-5 conectword">Payment method:</span>
+                                <span id="orderPaymentValue"><?php echo htmlspecialchars($_SESSION['payment_method'] ?? 'Not selected'); ?></span>
+                            </div>
 
-                    </div>
+                        </div>
                     </form>
 
                     <!-- Button -->
@@ -175,7 +175,7 @@ if ($payment_method) {
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a></div>
-                       
+
                     </div>
                 </div>
 
@@ -189,20 +189,20 @@ if ($payment_method) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-    // Only update dynamically if you have live cart changes
-    const cartTotalSpan = document.getElementById('orderTotalValue');
-    const cartTotalInput = document.getElementById('cart-total-input');
+        // Only update dynamically if you have live cart changes
+        const cartTotalSpan = document.getElementById('orderTotalValue');
+        const cartTotalInput = document.getElementById('cart-total-input');
 
-    // Example: if cart total changes dynamically
-    function updateCartTotal(newTotal) {
-        cartTotalSpan.textContent = `$${newTotal.toFixed(2)}`;
-        cartTotalInput.value = newTotal.toFixed(2);
-    }
+        // Example: if cart total changes dynamically
+        function updateCartTotal(newTotal) {
+            cartTotalSpan.textContent = `$${newTotal.toFixed(2)}`;
+            cartTotalInput.value = newTotal.toFixed(2);
+        }
 
-    // Initial value from PHP session (optional, already set)
-    let initialTotal = <?php echo $_SESSION['cart_total'] ?? 0; ?>;
-    updateCartTotal(initialTotal);
-</script>
+        // Initial value from PHP session (optional, already set)
+        let initialTotal = <?php echo $_SESSION['cart_total'] ?? 0; ?>;
+        updateCartTotal(initialTotal);
+    </script>
 </body>
 
-</html>                                
+</html>
