@@ -1,40 +1,33 @@
-const qtyDisplay = document.getElementById("qty-display");
-const actionInput = document.getElementById("action-input");
-const form = document.getElementById("quantity-form");
+document.addEventListener('DOMContentLoaded', () => {
+    let qty = 1;
 
-async function updateQuantity(action) {
-    const formData = new FormData(form);
-    formData.set("action", action);
+    const decBtn = document.getElementById('dec-btn');
+    const incBtn = document.getElementById('inc-btn');
+    const qtyDisplay = document.getElementById('qty-display');
+    const qtyInput = document.getElementById('add-to-cart-qty');
+    const addToCartForm = document.getElementById('add-to-cart-form');
 
-    try {
-        const response = await fetch("php/product.php", {
-            method: "POST",
-            body: formData
-        });
-
-        const result = await response.json();
-
-        // If PHP sends back a value, update the display
-        if (result.quantity !== null) {
-            // The frontend qty is already changed, so nothing here
-        }
-    } catch (error) {
-        console.error("Error updating quantity:", error);
+    // Function to sync span and hidden input
+    function updateQty() {
+        qtyDisplay.textContent = qty;
+        qtyInput.value = qty;
     }
-}
 
-document.getElementById("inc-btn").onclick = function () {
-    let qty = parseInt(qtyDisplay.innerText);
-    qty++;
-    qtyDisplay.innerText = qty;
-    updateQuantity("increase");
-};
+    decBtn.addEventListener('click', () => {
+        if (qty > 1) qty--;
+        updateQty();
+    });
 
-document.getElementById("dec-btn").onclick = function () {
-    let qty = parseInt(qtyDisplay.innerText);
-    if (qty > 1) {
-        qty--;
-        qtyDisplay.innerText = qty;
-        updateQuantity("decrease");
-    }
-};
+    incBtn.addEventListener('click', () => {
+        qty++;
+        updateQty();
+    });
+
+    // This is the crucial part: ensure the latest quantity is sent
+    addToCartForm.addEventListener('submit', (e) => {
+        updateQty(); // must run right before submit
+    });
+
+    // Initialize
+    updateQty();
+});

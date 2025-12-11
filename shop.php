@@ -98,7 +98,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="1">
                                 <input type="hidden" name="product_price" value="199.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-1">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -116,7 +116,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="2">
                                 <input type="hidden" name="product_price" value="299.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-2">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -134,7 +134,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="3">
                                 <input type="hidden" name="product_price" value="19.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-3">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -152,7 +152,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="4">
                                 <input type="hidden" name="product_price" value="299.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-4">
+                                <input type="hidden" name="product_qty" value="1"  class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -174,7 +174,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="5">
                                 <input type="hidden" name="product_price" value="89.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-5">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -193,7 +193,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="6">
                                 <input type="hidden" name="product_price" value="19.99">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-6">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
@@ -211,7 +211,7 @@ session_start()
                             <<form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="7">
                                 <input type="hidden" name="product_price" value="19.0">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-7">
+                                <input type="hidden" name="product_qty" value="1" class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                                 </form>
                         </div>
@@ -229,7 +229,7 @@ session_start()
                             <form action="php/add-to-cart.php" method="POST">
                                 <input type="hidden" name="product_id" value="8">
                                 <input type="hidden" name="product_price" value="16.99">
-                                <input type="hidden" name="product_qty" value="1" id="product-qty-8">
+                                <input type="hidden" name="product_qty" value="1"  class="product-qty-input">
                                 <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                             </form>
                         </div>
