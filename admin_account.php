@@ -1,6 +1,19 @@
 <?php
-session_start()
+session_start();
+require_once('./php/tools.php');
+
+$conn = Database::connect();
+$result = $conn->query("SELECT * FROM account WHERE role = 'user'"); // lowercase 'role'
+
+$users = [];
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
+    }
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,10 +41,10 @@ session_start()
 
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
-   <!-- navbar -->
-   <nav class="navbar navbar-expand-lg navbar-light px-4 ">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
             <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -51,17 +64,19 @@ session_start()
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                  
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                    <button class="btn btn-link nav-icon p-0">
-                        <img src="./assets/imgs/icons/interface/outline/search 02.svg" alt="Search">
-                    </button>
-                    <a href="./user.html" class="btn btn-link nav-icon p-0">
-                        
-                        <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
-                    </a>
+                    <?php if ($_SESSION['role'] === 'admin') { ?>
+                        <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } else { ?>
+                        <a href="./user_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } ?>
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
@@ -93,14 +108,14 @@ session_start()
                                 <img src="./assets/imgs/Account/Protofile sample.png" alt="Profile Image">
                             </div>
                             <!--should receive from php-->
-                            <h3 class="profile-name">Sofia Havertz</h3>
+                            <h3 class="profile-name"><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
 
                             <div class="section-title">Account</div>
                             <hr class="divider">
 
                             <ul class="menu">
-                                <li><a href="cart.html">Cart</a></li>
-                                <li><a href="#">Log Out</a></li>
+                                <li><a href="cart.php">Cart</a></li>
+                                <li><a href="login.php">Log Out</a></li>
                             </ul>
                         </div>
                     </form>
@@ -115,11 +130,11 @@ session_start()
                         <form>
                             <div class="info-box">
                                 <!--should receive from php-->
-                                <p><strong>Name:</strong> <span>Sofia</span></p>
+                                <p><strong>Name:</strong> <span><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>age:</strong> <span>Havertz</span></p>
+                                <p><strong>age:</strong> <span><?= isset($_SESSION['age']) ? (int)$_SESSION['age'] : 'N/A'; ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>Email:</strong> <span>sofia@gmail.com</span></p>
+                                <p><strong>Email:</strong> <span><?php echo htmlspecialchars($_SESSION['email']); ?></span></p>
 
                             </div>
                         </form>
@@ -148,37 +163,38 @@ session_start()
                                 </thead>
 
                                 <tbody id="users_table_body">
-                                    <form>
-                                     <!-- ← Loop over all users -->
+                                    <?php foreach ($users as $user): ?>
                                         <tr>
-                                             <!-- ← هنا PHP سيدخل اليوزرز من قاعدة البيانات -->
-                                             <!--user name-->
-                                              <td><span>Sofia Havertz</span></td>
-                                             <!--user age-->
-                                              <td><span>35</span></td>
-                                             <!--user email-->
-                                              <td><span>sofia@gmail.com</span></td>
-                                             <!--user password-->
-                                              <td><span>sofia123</span></td>
+                                            <td><?= htmlspecialchars($user['Name']); ?></td>
+                                            <td><?= number_format($user['Age']); ?></td>
+                                            <td><?= htmlspecialchars($user['Email']); ?></td>
+                                            <td><?= htmlspecialchars($user['Password']); ?></td>
 
                                             <td>
-                                                <button class="btn btn-danger btn-sm">Delete </button>
+                                                <form method="POST" action="./php/admin.php">
+                                                    <input type="hidden" name="user_id" value="<?= $user['User_ID']; ?>">
+                                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
                                             </td>
 
                                             <td>
-                                                <button class="btn btn-warning btn-sm">Update</button>
+                                                <form method="GET" action="update_user.php">
+                                                    <input type="hidden" name="user_id" value="<?= $user['User_ID']; ?>">
+                                                    <button class="btn btn-warning btn-sm">Update</button>
+                                                </form>
                                             </td>
+
                                         </tr>
-                                    </form>
-                                    
+                                    <?php endforeach; ?>
                                 </tbody>
+
                             </table>
                         </div>
 
                     </div>
 
                     <script>
-                        document.getElementById("editBtn").addEventListener("click", function () {
+                        document.getElementById("editBtn").addEventListener("click", function() {
                             document.getElementById("editForm").classList.toggle("hidden");
                         });
                     </script>
@@ -203,7 +219,7 @@ session_start()
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a></div>
-                       
+
                     </div>
                 </div>
 

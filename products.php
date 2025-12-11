@@ -75,10 +75,15 @@ $product = $result->fetch_assoc();
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
 
-                    <a href="./user.php" class="btn btn-link nav-icon p-0">
-
-                        <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
-                    </a>
+                    <?php if ($_SESSION['role'] === 'admin') { ?>
+                        <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } else {?>
+                        <a href="./user_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } ?>
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>

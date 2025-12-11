@@ -23,33 +23,46 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $result = $check->get_result();
 
     if ($result->num_rows > 0) {
-        // Email already used
         header("Location: sign-up.php?error=alreadyused");
         exit();
     }
 
-    // Insert new user (pending approval)
+    // Hash password
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    $role = "user";
+    // Auto assign role
+    if (strpos(strtolower($email), "admin") !== false) {
+        $role = "admin";
+        $status = "approved"; 
+    } else {
+        $role = "user";
+        $status = "pending"; 
+    }
+
     $photo = "default.jpg";
-    $status = "pending";
 
     $sql = "INSERT INTO account (Name, Email, Age, Role, Password, Photo, Status) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssissss", $name, $email, $age, $role, $hashed, $photo, $status);
 
     if ($stmt->execute()) {
-        $_SESSION["username"] = $name; // log in server-side
+        // Auto-login
+        $_SESSION["username"] = $name;
+        $_SESSION["email"] = $email;
+        $_SESSION["age"] = $age;
+        $_SESSION["role"] = $role;
+
         header("Location: index.php?success=1");
         exit();
     } else {
-        header("Location: sign-up.php");
+        header("Location: sign-up.php?error=db");
         exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

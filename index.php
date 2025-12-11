@@ -1,8 +1,15 @@
 <?php
-session_start()
+session_start();
+require_once("./php/tools.php");
+
+$conn = Database::connect();
+$query = $conn->prepare("SELECT Email FROM account");
+$query->execute();  
+$result = $query->get_result();
+
 ?>
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html
+    <html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -26,9 +33,9 @@ session_start()
 
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
- <!-- navbar -->
+    <!-- navbar -->
     <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
             <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
@@ -49,22 +56,26 @@ session_start()
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./products.php">Product</a>
                     </li>
-                  
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                  
-                    <a href="./user.php" class="btn btn-link nav-icon p-0">
-                        
-                        <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
-                    </a>
-                    <a href="./cart.php" class="btn btn-link nav-icon p-0">
-                        <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
-                    </a>
-                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
-                        <button class="btn btn-dark" id="login-btn">Login</button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
-                    </div>
+                    <?php if ($_SESSION['role'] === 'admin') { ?>
+                        <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } else {?>
+                        <a href="./user_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } ?>
+                            <a href="./cart.php" class="btn btn-link nav-icon p-0">
+                                <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
+                            </a>
+                            <div id="auth-buttons" class="d-flex align-items-center gap-3">
+                                <button class="btn btn-dark" id="login-btn">Login</button>
+                                <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                            </div>
                 </div>
             </div>
         </div>
@@ -265,7 +276,7 @@ session_start()
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a>
                         </div>
-                       
+
 
                     </div>
                 </div>
@@ -283,7 +294,7 @@ session_start()
     <!-- Link JS file here -->
     <script src="./assets/js/main.js"></script>
     <script src="./assets/js/entery.js"></script>
-    
+
 </body>
 
 </html>
