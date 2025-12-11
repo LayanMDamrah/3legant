@@ -178,37 +178,25 @@ $product = $result->fetch_assoc();
                         <!--button section-->
                         <div class="container-fluid">
                             <div class="row align-items-center g-3">
+                                <div class="d-flex justify-content-between align-items-center border rounded p-2" style="width:120px;">
+                                    <button type="button" id="dec-btn" class="btn btn-sm fw-bold">-</button>
+                                    <span id="qty-display">1</span>
+                                    <button type="button" id="inc-btn" class="btn btn-sm fw-bold">+</button>
+                                </div>
 
-                                <!-- Quantity selector -->
-
-                                <!-- form -->
-                                <form id="quantity-form" action="php/product.php" method="POST"
-                                    class="d-flex align-items-center">
-
-                                    <!-- Hidden fields required by PHP -->
-                                    <input type="hidden" name="product_id" value="1"> <!-- Change to real ID -->
-                                    <input type="hidden" name="action" id="action-input" value="">
-
-                                    <div class="col-4">
-                                        <div class="d-flex justify-content-between align-items-center border rounded p-2"
-                                            style="width:120px;">
-                                            <button type="button" id="dec-btn" class="btn btn-sm fw-bold">-</button>
-                                            <span id="qty-display" class="fw-bold">1</span>
-                                            <button type="button" id="inc-btn" class="btn btn-sm fw-bold">+</button>
-                                        </div>
-                                    </div>
+                                <form action="php/add-to-cart.php" method="POST" id="add-to-cart-form">
+                                    <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                                    <input type="hidden" name="product_price" value="<?php echo $product['Price']; ?>">
+                                    <input type="hidden" name="product_qty" value="1" id="add-to-cart-qty">
+                                    <button class="btn btn-dark mt-auto w-100">Add to cart</button>
                                 </form>
 
 
-                                <!-- Add to cart -->
-                                <div class="col-8">
-                                    <form action="php/add-to-cart.php" method="POST">
-                                        <input type="hidden" name="product_id" value="6">
-                                        <input type="hidden" name="product_price" value="19.99">
-                                        <input type="hidden" name="product_qty" value="1" id="product-qty-6">
-                                        <button class="btn btn-dark mt-auto w-100">Add to cart</button>
-                                    </form>
-                                </div>
+
+
+
+
+
 
                             </div>
                         </div>
@@ -247,8 +235,43 @@ $product = $result->fetch_assoc();
 
         <script src=" https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Link JS file here -->
-        <script src="assets/js/counter.js"></script>
         <script src="./assets/js/entery.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                let qty = 1;
+
+                const decBtn = document.getElementById('dec-btn');
+                const incBtn = document.getElementById('inc-btn');
+                const qtyDisplay = document.getElementById('qty-display');
+                const qtyInput = document.getElementById('add-to-cart-qty');
+                const addToCartForm = document.getElementById('add-to-cart-form');
+
+                // Function to sync span and hidden input
+                function updateQty() {
+                    qtyDisplay.textContent = qty;
+                    qtyInput.value = qty;
+                }
+
+                decBtn.addEventListener('click', () => {
+                    if (qty > 1) qty--;
+                    updateQty();
+                });
+
+                incBtn.addEventListener('click', () => {
+                    qty++;
+                    updateQty();
+                });
+
+                // This is the crucial part: ensure the latest quantity is sent
+                addToCartForm.addEventListener('submit', (e) => {
+                    updateQty(); // must run right before submit
+                });
+
+                // Initialize
+                updateQty();
+            });
+        </script>
+
 
 </body>
 

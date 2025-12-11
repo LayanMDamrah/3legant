@@ -1,39 +1,35 @@
 <?php
 session_start();
-require_once("php/tools.php");
+require_once('./php/tools.php'); // assuming this has your Database connection
 
-// Validate GET parameter
-if (!isset($_GET['order_code']) || !is_numeric($_GET['order_code'])) {
-    echo "Invalid order code.";
-    exit;
+// Get the selected payment method from POST
+$payment_method = $_POST['payment'] ?? null;
+
+if ($payment_method) {
+    // Store it in session
+    $_SESSION['payment_method'] = $payment_method;
+
+    // Assuming you already have total stored in session or calculate it
+    $total = $_SESSION['cart_total'] ?? 0;
+
+    $conn = Database::connect();
+
+    // Insert into your bill table
+    $stmt = $conn->prepare("INSERT INTO bill (payment_method, total, date) VALUES (?, ?, NOW())");
+    $stmt->bind_param("sd", $payment_method, $total);
+    $stmt->execute();
+
+    // Get inserted bill ID if needed
+    $bill_id = $stmt->insert_id;
+
+    $stmt->close();
+    $conn->close();
+
+} else {
+    echo "Please select a payment method!";
 }
-
-$order_code = (int)$_GET['order_code'];
-
-$conn = Database::connect();
-
-// Prepare and execute query
-$sql = "SELECT * FROM bill WHERE Order_Code = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $order_code);
-$stmt->execute();
-$result = $stmt->get_result()->fetch_assoc();
-
-if (!$result) {
-    echo "Bill not found.";
-    exit;
-}
-
-// Redirect to bill.php with GET parameters
-$url = "bill.php"
-     . "?code=" . urlencode($result['Order_Code'])
-     . "&date=" . urlencode($result['Date'])
-     . "&total=" . urlencode($result['Total'])
-     . "&payment=" . urlencode($result['Payment_Method']);
-
-header("Location: $url");
-exit;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -134,17 +130,17 @@ exit;
 
                         <div class="d-flex mb-2">
                             <span class="fw-semibold paragraph me-5 conectword">Date:</span>
-                            <span id="orderDateValue"></span>
+                            <span id="orderDateValue"><?php echo date('Y-m-d'); ?></span>
                         </div>
 
                         <div class="d-flex mb-2">
                             <span class="fw-semibold paragraph me-5 conectword">Total:</span>
-                            <span id="orderTotalValue"></span>
+                            <span id="orderTotalValue">$<?php echo number_format($_SESSION['cart_total'] ?? 0, 2); ?></span>
                         </div>
 
                         <div class="d-flex mb-4">
                             <span class="fw-semibold paragraph me-5 conectword">Payment method:</span>
-                            <span id="orderPaymentValue"></span>
+                            <span id="orderPaymentValue"><?php echo htmlspecialchars($_SESSION['payment_method'] ?? 'Not selected'); ?></span>
                         </div>
 
                     </div>
@@ -187,7 +183,21 @@ exit;
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/bill.js"></script>
+    <script>
+    // Only update dynamically if you have live cart changes
+    const cartTotalSpan = document.getElementById('orderTotalValue');
+    const cartTotalInput = document.getElementById('cart-total-input');
+
+    // Example: if cart total changes dynamically
+    function updateCartTotal(newTotal) {
+        cartTotalSpan.textContent = `$${newTotal.toFixed(2)}`;
+        cartTotalInput.value = newTotal.toFixed(2);
+    }
+
+    // Initial value from PHP session (optional, already set)
+    let initialTotal = <?php echo $_SESSION['cart_total'] ?? 0; ?>;
+    updateCartTotal(initialTotal);
+</script>
 </body>
 
 </html>                                
