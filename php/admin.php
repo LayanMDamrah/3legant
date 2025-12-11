@@ -9,13 +9,13 @@ class Admin
 
         // Random password
         $plain_pass = bin2hex(random_bytes(4));
-        $hash = password_hash($plain_pass, PASSWORD_DEFAULT);
+        //$hash = password_hash($plain_pass, PASSWORD_DEFAULT);
 
         // Insert into database
         $sql = "INSERT INTO account (Name, Email, Age, Role, Photo, Password, Status) 
             VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssissss", $name, $email, $age, $role, $photo, $hash, $status);
+        $stmt->bind_param("ssissss", $name, $email, $age, $role, $photo, $plain_pass, $status);
 
         if ($stmt->execute()) {
             // Save Info in the session
@@ -135,11 +135,11 @@ class Admin
     {
         $conn = Database::connect();
 
-        $hash = password_hash($new_pass, PASSWORD_DEFAULT);
+        //$hash = password_hash($new_pass, PASSWORD_DEFAULT);
 
         $sql = "UPDATE user SET Password = ? WHERE User_ID = ?";
         $query = $conn->prepare($sql);
-        $query->bind_param("si", $hash, $user_id);
+        $query->bind_param("si", $new_pass, $user_id);
 
         return $query->execute();
     }
