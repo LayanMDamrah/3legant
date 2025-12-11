@@ -38,24 +38,3 @@ document.getElementById("dec-btn").onclick = function () {
         updateQuantity("decrease");
     }
 };
-
-async function updateQuantity(action) {
-    const formData = new FormData(form);
-    formData.set("action", action);
-
-    try {
-        const response = await fetch("php/update_quantity.php", {
-            method: "POST",
-            body: formData
-        });
-
-        const result = await response.json();
-
-        if (result.quantity !== null) {
-            qtyDisplay.innerText = result.quantity;
-        }
-    } catch (error) {
-        console.error("Error updating quantity:", error);
-    }
-}
-
