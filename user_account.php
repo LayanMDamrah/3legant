@@ -1,5 +1,5 @@
 <?php
-session_start()
+session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +54,16 @@ session_start()
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                  
+                    
+                    <?php if ($_SESSION['role'] === 'admin') { ?>
+                        <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } else {?>
+                        <a href="./user_account.php" class="btn btn-link nav-icon p-0">
+                            <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
+                        </a>
+                    <?php } ?>
                     <a href="./user.php" class="btn btn-link nav-icon p-0">
                         
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">

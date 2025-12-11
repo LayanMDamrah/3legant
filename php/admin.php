@@ -1,4 +1,21 @@
 <?php
+session_start();
+require_once("tools.php");
+
+// Handle delete request
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['user_id'])) {
+
+    $user_id = (int)$_POST['user_id'];
+
+    // Call your Admin class function
+    Admin::deleteUsers($user_id);
+
+    // Redirect to avoid form resubmission
+    header("Location: ../admin_account.php?deleted=1");
+    exit();
+}
+?>
+<?php
 require_once("tools.php");
 
 class Admin
@@ -101,23 +118,20 @@ class Admin
     {
         $conn = Database::connect();
 
-        $sql = "DELETE FROM user WHERE User_Id = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("i", $user_id);
+        // 1) Delete from user table
+        $sql1 = "DELETE FROM user WHERE User_ID = ?";
+        $query1 = $conn->prepare($sql1);
+        $query1->bind_param("i", $user_id);
+        $query1->execute();
 
-        return $query->execute();
-    }
+        // 2) Delete from account table
+        $sql2 = "DELETE FROM account WHERE User_ID = ?";
+        $query2 = $conn->prepare($sql2);
+        $query2->bind_param("i", $user_id);
+        $query2->execute();
 
-    static function viewUsers($user_id)
-    {
-        $conn = Database::connect();
-
-        $sql = "SELECT * FROM user WHERE User_Id = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("i", $user_id);
-        $query->execute();
-
-        return $query->get_queryult()->fetch_assoc();
+        // Return true only if both succeeded
+        return ($query1->affected_rows > 0 || $query2->affected_rows > 0);
     }
 
     static function updateUserInfo($user_id, $name, $photo)
@@ -140,17 +154,6 @@ class Admin
         $sql = "UPDATE user SET Password = ? WHERE User_ID = ?";
         $query = $conn->prepare($sql);
         $query->bind_param("si", $new_pass, $user_id);
-
-        return $query->execute();
-    }
-
-    static function confirmBill($order_code)
-    {
-        $conn = Database::connect();
-
-        $sql = "UPDATE bill SET Payment_Method = 'confirmed' WHERE Order_Code = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("s", $order_code);
 
         return $query->execute();
     }

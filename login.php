@@ -50,9 +50,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: login.php?error=" . implode(",", $errors));
         exit();
     }
+    // SUCCESS LOGIN → STORE ALL NEEDED INFO
+    $_SESSION["User_ID"] = $user["User_ID"];
+    $_SESSION["username"] = $user["Name"];
+    $_SESSION["email"] = $user["Email"];
+    $_SESSION["photo"] = $user["Photo"];
+    $_SESSION["status"] = $user["Status"];
+    $_SESSION["age"] = $user["Age"];
 
-    // Save session and redirect to index
-    $_SESSION["username"] = $username;
+    $email = $user["Email"];
+
+    if (strpos(strtolower($email), "admin") !== false) {
+        // email contains "admin"
+        $role = "admin";
+        $_SESSION["role"] = $role;
+    } else {
+        // normal user
+        $role = "user";
+        $_SESSION["role"] = $role;
+    }
+
+    $sql = "UPDATE account SET Role = ? WHERE Email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $role, $email);
+    $stmt->execute();
     header("Location: index.php?success=1");
     exit();
 }
