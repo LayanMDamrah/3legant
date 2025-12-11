@@ -139,7 +139,7 @@ $conn = Database::connect(); // Connect once
                     <form action="bill.php" method="POST">
                         <p class="Heading-3">Cart summary</p>
                         <div class="form-check mb-3 p-3 border rounded">
-                            <input class="form-check-input" type="radio" name="payment" value="credit_card" id="pay1">
+                            <input class="form-check-input" type="radio" name="payment" value="Credit Card" id="pay1">
                             <label class="form-check-label w-100" for="pay1">
                                 <div class="fw-bold">Credit Card</div>
                                 <small class="text-muted">Visa, MasterCard, AMEX</small>
@@ -147,7 +147,7 @@ $conn = Database::connect(); // Connect once
                         </div>
 
                         <div class="form-check mb-3 p-3 border rounded">
-                            <input class="form-check-input" type="radio" name="payment" value="paypal" id="pay2">
+                            <input class="form-check-input" type="radio" name="payment" value="Paypal" id="pay2">
                             <label class="form-check-label w-100" for="pay2">
                                 <div class="fw-bold">PayPal</div>
                                 <small class="text-muted">Fast & secure checkout</small>
@@ -155,7 +155,7 @@ $conn = Database::connect(); // Connect once
                         </div>
 
                         <div class="form-check mb-3 p-3 border rounded">
-                            <input class="form-check-input" type="radio" name="payment" value="cash_on_delivery" id="pay3">
+                            <input class="form-check-input" type="radio" name="payment" value="Cash On Delivery" id="pay3">
                             <label class="form-check-label w-100" for="pay3">
                                 <div class="fw-bold">Cash on Delivery</div>
                                 <small class="text-muted">+ 5$ service fee</small>

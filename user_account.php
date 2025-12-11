@@ -1,5 +1,29 @@
 <?php
 session_start();
+require_once('./php/tools.php');
+
+$conn = Database::connect();
+
+// Make sure the user is logged in
+if (!isset($_SESSION['User_ID'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Fetch the logged-in user's info
+$userid = $_SESSION['User_ID'];
+$result = $conn->prepare("SELECT * FROM account WHERE User_ID = ?");
+$result->bind_param("i", $userid);
+$result->execute();
+$user = $result->get_result()->fetch_assoc();
+
+// Check if user exists
+if (!$user) {
+    echo "User not found!";
+    exit();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -96,10 +120,10 @@ session_start();
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="./assets/imgs/Account/Protofile sample.png" alt="Profile Image">
+                                <img src="<?php echo $user['Photo']; ?>" alt="Profile Image" style="width:150px; height:150px; border-radius:50%;">
                             </div>
                             <!--should receive from php-->
-                            <h3 class="profile-name">Sofia Havertz</h3>
+                            <h3 class="profile-name"><?= htmlspecialchars($user['Name']); ?></h3>
 
                             <div class="section-title">Account</div>
                             <hr class="divider">
@@ -121,11 +145,11 @@ session_start();
                         <form>
                             <div class="info-box">
                                 <!--should receive from php-->
-                                <p><strong>Name:</strong> <span >Sofia</span></p>
+                                <p><strong>Name:</strong> <span ><?= htmlspecialchars($user['Name']); ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>age:</strong> <span >Havertz</span></p>
+                                <p><strong>age:</strong> <span ><?= number_format($user['Age']); ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>Email:</strong> <span >sofia@gmail.com</span></p>
+                                <p><strong>Email:</strong> <span ><?= htmlspecialchars($user['Email']); ?></span></p>
 
                             </div>
                         </form>
@@ -136,7 +160,9 @@ session_start();
                         <!-- EDIT FORM (HIDDEN INITIALLY) -->
                         <div id="editForm" class="edit-form hidden">
                             <h2>Account Details</h2>
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="./php/admin.php" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="account_type" value="user">
+                                <input type="hidden" name="update_user_id" value="<?= $user['User_ID']; ?>">
                                 <label>NAME *</label>
                                 <input type="text" name="name" placeholder="Name">
 
@@ -152,7 +178,7 @@ session_start();
                                 <label>PROFILE IMAGE</label>
                                 <input type="file" name="profile_image" accept="image/*">
 
-                                <button class="save-btn">Admin cheak</button>
+                                <button class="save-btn">Admin check</button>
                             </form>
                         </div>
 

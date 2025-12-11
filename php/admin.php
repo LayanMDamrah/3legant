@@ -2,19 +2,69 @@
 session_start();
 require_once("tools.php");
 
-// Handle delete request
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['user_id'])) {
-
-    $user_id = (int)$_POST['user_id'];
-
-    // Call your Admin class function
+// Check if the form is for deleting a user
+if (isset($_POST['delete_user_id'])) {
+    $user_id = (int)$_POST['delete_user_id'];
+    
+    // Call your Admin delete function
     Admin::deleteUsers($user_id);
 
     // Redirect to avoid form resubmission
     header("Location: ../admin_account.php?deleted=1");
     exit();
 }
+// Check if the form is for updating a user
+if (isset($_POST['update_user_id'])) {
+
+    $user_id = (int)$_POST['update_user_id'];
+    $name    = $_POST['name'];
+    $age     = $_POST['age'];
+    $email   = $_POST['email'];
+    $password = $_POST['password'];
+
+    $account_type = $_POST['account_type'] ?? 'user'; // <-- ADD THIS
+
+    // Handle image upload
+    $photo = $_POST['old_photo'] ?? null;
+    if (!empty($_FILES['profile_image']['name']) && $_FILES['profile_image']['error'] === 0) {
+        $uploadDir = __DIR__ . '/../uploads/';
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+        $filename = preg_replace("/[^a-zA-Z0-9_\-\.]/", "_", $_FILES['profile_image']['name']);
+        $photo = 'uploads/' . $filename;
+        move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadDir . $filename);
+    }
+
+    Admin::updateUserAcc($user_id, $name, $age, $email, $password, $photo);
+
+    if ($account_type === 'admin') {
+        header("Location: ../admin_account.php?updated=1");
+    } else {
+        header("Location: ../user_account.php?updated=1");
+    }
+    exit();
+}
+
+
+// Check if the form is for updating a user
+if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
+    $uploadDir = __DIR__ . '/../uploads/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true); // create if missing
+    }
+
+    // Sanitize filename to remove special chars
+    $filename = preg_replace("/[^a-zA-Z0-9_\-\.]/", "_", $_FILES['profile_image']['name']);
+    $photo = 'uploads/' . $filename;
+
+    move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadDir . $filename);
+
+    // Redirect to avoid form resubmission
+    header("Location: ../user_account.php?updated=1");
+    exit();
+}
 ?>
+
 <?php
 require_once("tools.php");
 
@@ -26,7 +76,6 @@ class Admin
 
         // Random password
         $plain_pass = bin2hex(random_bytes(4));
-        //$hash = password_hash($plain_pass, PASSWORD_DEFAULT);
 
         // Insert into database
         $sql = "INSERT INTO account (Name, Email, Age, Role, Photo, Password, Status) 
@@ -54,20 +103,6 @@ class Admin
         }
 
         return false;
-    }
-
-    // Get all pending users
-    static function getPendingUsers()
-    {
-        $conn = Database::connect();
-        $sql = "SELECT * FROM account WHERE Status='pending'";
-        $result = $conn->query($sql);
-
-        $users = [];
-        while ($row = $result->fetch_assoc()) {
-            $users[] = $row;
-        }
-        return $users;
     }
 
     static function userFoundOrNot()
@@ -134,27 +169,34 @@ class Admin
         return ($query1->affected_rows > 0 || $query2->affected_rows > 0);
     }
 
-    static function updateUserInfo($user_id, $name, $photo)
+    static function updateUserAcc($user_id, $name, $age, $email, $password, $photo)
     {
         $conn = Database::connect();
+        $conn->begin_transaction();
+        if($photo){
+        $sql1 = "UPDATE account SET Name = ?, Age = ?, Email = ?, Password = ?, Photo = ? WHERE User_Id = ?";
+        $query1 = $conn->prepare($sql1);
+        $query1->bind_param("sisssi", $name, $age, $email, $password, $photo, $user_id);
 
-        $sql = "UPDATE user SET Name = ?, User_Id = ?, Photo = ? WHERE User_Id = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("sis", $name, $user_id, $photo);
+        $sql2 = "UPDATE user SET Name = ?, Password = ?, Photo = ? WHERE User_Id = ?";
+        $query2 = $conn->prepare($sql2);
+        $query2->bind_param("sssi", $name, $password, $photo, $user_id);
+        
+        }
+        else{
+            $sql1 = "UPDATE account SET Name = ?, Age = ?, Email = ?, Password = ? WHERE User_Id = ?";
+        $query1 = $conn->prepare($sql1);
+        $query1->bind_param("sissi", $name, $age, $email, $password, $user_id);
 
-        return $query->execute();
+        $sql2 = "UPDATE user SET Name = ?, Password = ? WHERE User_Id = ?";
+        $query2 = $conn->prepare($sql2);
+        $query2->bind_param("ssi", $name, $password, $user_id);
+        }
+
+        $query1->execute();
+        $query2->execute();
+        $conn->commit();
+        return true;
     }
 
-    static function setUserPassword($user_id, $new_pass)
-    {
-        $conn = Database::connect();
-
-        //$hash = password_hash($new_pass, PASSWORD_DEFAULT);
-
-        $sql = "UPDATE user SET Password = ? WHERE User_ID = ?";
-        $query = $conn->prepare($sql);
-        $query->bind_param("si", $new_pass, $user_id);
-
-        return $query->execute();
-    }
 }
