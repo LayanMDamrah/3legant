@@ -2,6 +2,11 @@
 session_start();
 require_once('./php/tools.php');
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $conn = Database::connect();
 
 // Make sure the user is logged in
@@ -97,7 +102,7 @@ if (!$user) {
                         <button class="btn btn-dark" id="login-btn">
                             <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                     </div>
                 </div>
             </div>
@@ -118,7 +123,7 @@ if (!$user) {
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="./assets/imgs/Account/<?php echo $user['Photo']; ?>" alt="Profile Image" style="width:150px; height:150px; border-radius:50%;">
+                                <img src="./assets/imgs/Account/<?php echo basename($user['Photo']); ?>" alt="Profile Image" style="width:150px; height:150px; border-radius:50%;">
                             </div>
                             <!--should receive from php-->
                             <h3 class="profile-name"><?= htmlspecialchars($user['Name']); ?></h3>

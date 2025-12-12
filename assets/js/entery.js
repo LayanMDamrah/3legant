@@ -63,37 +63,7 @@ if (localStorage.getItem("userLoggedIn") === "true") {
 }
 
 
-//  Logout 
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("userLoggedIn");
-        window.location.href = "login.php";
-    });
-}
-
-
-// block everything before logingin
-document.addEventListener("DOMContentLoaded", () => {
-    const loggedIn = localStorage.getItem("userLoggedIn") === "true";
-
-    if (!loggedIn) {
-        const protectedElements = document.querySelectorAll("a, button, img");
-
-        protectedElements.forEach(el => {
-            el.addEventListener("click", (e) => {
-
-                // allow form submission
-                if (el.type === "submit") return;
-
-                // allow login button (navbar)
-                if (el.id === "login-btn") return;
-
-                // allow signup 
-                if (el.id === "signup-btn") return;
-
-                e.preventDefault();
-                window.location.href = "login.php";
-            });
-        });
-    }
+logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("userLoggedIn");
+    window.location.href = "logout.php";
 });

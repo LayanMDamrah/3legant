@@ -2,6 +2,12 @@
 session_start();
 require_once('./php/tools.php');
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
+
 // Get the selected payment method from POST
 $payment_method = $_POST['payment'] ?? null;
 
@@ -97,11 +103,11 @@ if ($payment_method) {
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
+                    
                         <button class="btn btn-dark" id="login-btn">
                             <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                     </div>
                 </div>
             </div>
