@@ -48,9 +48,7 @@ session_start();
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.php">Product</a>
-                    </li>
+                   
 
                 </ul>
 
@@ -258,7 +256,6 @@ session_start();
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a></div>
 
                     </div>
                 </div>

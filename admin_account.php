@@ -76,9 +76,7 @@ if (isset($_SESSION['username'])) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.php">Product</a>
-                    </li>
+                  
 
                 </ul>
 
@@ -264,8 +262,6 @@ if (isset($_SESSION['username'])) {
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a></div>
 
                     </div>
                 </div>
