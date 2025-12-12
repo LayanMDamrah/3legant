@@ -2,6 +2,12 @@
 session_start();
 require_once('./php/tools.php');
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
+
 $conn = Database::connect();
 $result = $conn->query("SELECT * FROM account WHERE role = 'user'"); // lowercase 'role'
 
@@ -93,11 +99,11 @@ if (isset($_SESSION['username'])) {
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
+                    <div id="auth-buttons" class="d-flex align-items-center gap-3" data-loggedin="<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>">
                         <button class="btn btn-dark" id="login-btn">
                             <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                     </div>
                 </div>
             </div>
@@ -118,7 +124,7 @@ if (isset($_SESSION['username'])) {
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="./assets/imgs/Account/<?php echo $admin['Photo']; ?>" alt="Profile Image">
+                                <img src="./assets/imgs/Account/<?php echo basename($admin['Photo']); ?>" alt="Profile Image">
                             </div>
                             <!--should receive from php-->
                             <h3 class="profile-name"><?php echo htmlspecialchars($_SESSION['username']); ?></h3>

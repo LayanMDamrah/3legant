@@ -2,6 +2,11 @@
 session_start();
 require_once("./php/tools.php");
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
 $conn = Database::connect();
 $query = $conn->prepare("SELECT Email FROM account");
 $query->execute();  
@@ -72,7 +77,7 @@ $result = $query->get_result();
                             </a>
                             <div id="auth-buttons" class="d-flex align-items-center gap-3">
                                 <button class="btn btn-dark" id="login-btn">Login</button>
-                                <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                                <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                             </div>
                 </div>
             </div>
