@@ -120,7 +120,7 @@ if (!$user) {
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="<?php echo $user['Photo']; ?>" alt="Profile Image" style="width:150px; height:150px; border-radius:50%;">
+                                <img src="./assets/imgs/Account/<?php echo $user['Photo']; ?>" alt="Profile Image" style="width:150px; height:150px; border-radius:50%;">
                             </div>
                             <!--should receive from php-->
                             <h3 class="profile-name"><?= htmlspecialchars($user['Name']); ?></h3>

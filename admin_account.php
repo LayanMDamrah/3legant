@@ -12,6 +12,21 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
+// بعد session_start() و Database::connect()
+$admin = null;
+if (isset($_SESSION['username'])) {
+    $stmt = $conn->prepare("SELECT * FROM account WHERE Name = ? LIMIT 1");
+    $stmt->bind_param("s", $_SESSION['username']);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res && $res->num_rows > 0) {
+        $admin = $res->fetch_assoc();
+    }
+    $stmt->close();
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -105,7 +120,7 @@ if ($result && $result->num_rows > 0) {
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="./assets/imgs/Account/Protofile sample.png" alt="Profile Image">
+                                <img src="./assets/imgs/Account/<?php echo $admin['Photo']; ?>" alt="Profile Image">
                             </div>
                             <!--should receive from php-->
                             <h3 class="profile-name"><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
