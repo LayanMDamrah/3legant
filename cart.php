@@ -46,7 +46,6 @@ $conn = Database::connect(); // Connect once
                 <ul class="navbar-nav mx-auto  mb-2 mb-lg-0 d-flex gap-4">
                     <li class="nav-item px-5"><a class="nav-link active" href="./index.php">Home</a></li>
                     <li class="nav-item px-5"><a class="nav-link" href="./shop.php">Shop</a></li>
-                    <li class="nav-item px-5"><a class="nav-link" href="./products.php">Product</a></li>
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
