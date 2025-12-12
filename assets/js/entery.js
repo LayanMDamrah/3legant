@@ -5,7 +5,6 @@ if (errorParam) {
     document.getElementById("incorrect").hidden = false;
 }
 
-
 // invalid username
 if (errorParam === "invalid") {
     document.getElementById("invalid").hidden = false;
@@ -16,9 +15,7 @@ if (errorParam === "alreadyused") {
     document.getElementById("alreadyused").hidden = false;
 }
 
-// =====================================
-//  HANDLE LOGIN ERRORS
-// =====================================
+// Login errors
 const param = new URLSearchParams(window.location.search);
 const errorParams = param.get("error");
 
@@ -64,8 +61,6 @@ if (localStorage.getItem("userLoggedIn") === "true") {
     if (loginBtn) loginBtn.hidden = false;
     if (logoutBtn) logoutBtn.hidden = true;
 }
-
-
 
 
 //  Logout 
