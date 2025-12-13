@@ -50,7 +50,7 @@ if (isset($_POST['update_user_id'])) {
     if (!empty($_FILES['profile_image']['name']) && $_FILES['profile_image']['error'] === 0) {
 
         //Upload file
-        $uploadDir = __DIR__ . '/assets/imgs/Account/'; // لاحظ الـ '/' في النهاية
+        $uploadDir = __DIR__ . '/../assets/imgs/Account/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
         // cleaning the file name 
