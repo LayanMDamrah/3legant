@@ -13,6 +13,7 @@ if (isset($_POST['delete_user_id'])) {
     header("Location: ../admin_account.php?deleted=1");
     exit();
 }
+
 // CREATE NEW USER
 if (isset($_POST['create_new_user'])) {
 
@@ -30,49 +31,71 @@ if (isset($_POST['create_new_user'])) {
     header("Location: ../admin_account.php?added=1");
     exit();
 }
-
-// Check if UPDATE request
+// UPDATE USER
 if (isset($_POST['update_user_id'])) {
 
-    $user_id  = (int)$_POST['update_user_id'];
-    $name     = $_POST['name'];
-    $age      = $_POST['age'];
-    $email    = $_POST['email'];
-    $password = $_POST['password'];
+    $user_id = (int)$_POST['update_user_id'];
+
+    // Fetch current user info from DB
+    $conn = Database::connect();
+    $stmt = $conn->prepare("SELECT * FROM account WHERE User_ID = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $currentUser = $stmt->get_result()->fetch_assoc();
+
+    if (!$currentUser) {
+        die("User not found!");
+    }
+
+    $name     = !empty($_POST['name']) ? $_POST['name'] : $currentUser['Name'];
+    $age      = !empty($_POST['age']) ? $_POST['age'] : $currentUser['Age'];
+    $email    = !empty($_POST['email']) ? $_POST['email'] : $currentUser['Email'];
+    $password = !empty($_POST['password']) ? $_POST['password'] : $currentUser['Password'];
     $account_type = $_POST['account_type'] ?? 'user';
 
-    if ($account_type === 'admin') {
-        // ADMIN → edit text only
-        $photo = $_POST['photo'] ?? null;
+    // ----- Email validation -----
+    $emailParts = explode('@', $email);
+    $domain = $emailParts[1] ?? '';
 
-    } else {
-    // USER → upload real photo
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || str_contains(strtolower($domain), 'admin')) {
+        // Invalid email → reject and stop
+        Admin::rejectUser($email);
+        header("Location: ../user_account.php?error=invalid_email");
+        exit(); // ✅ stop execution here
+    }
+
+    // Check if email is already used by another user
+    $stmt2 = $conn->prepare("SELECT * FROM account WHERE Email = ? AND User_ID != ?");
+    $stmt2->bind_param("si", $email, $user_id);
+    $stmt2->execute();
+    $result2 = $stmt2->get_result();
+
+    if ($result2->num_rows > 0) {
+        // Already used → reject and stop
+        Admin::rejectUser($email);
+        header("Location: ../user_account.php?error=alreadyused");
+        exit(); // ✅ stop execution here
+    }
+
+    // Email is valid and not used → approve
+    Admin::approveUser($email);
+
+    // ----- Handle photo -----
     if (!empty($_FILES['profile_image']['name']) && $_FILES['profile_image']['error'] === 0) {
-
-        //Upload file
-        $uploadDir = __DIR__ . '/assets/imgs/Account/'; // لاحظ الـ '/' في النهاية
+        $uploadDir = __DIR__ . '/../assets/imgs/Account/';
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-        // cleaning the file name 
         $filename = preg_replace("/[^a-zA-Z0-9_\-\.]/", "_", $_FILES['profile_image']['name']);
-
-        //where to save the upload photo
         $photo = 'assets/imgs/Account/' . $filename;
-
-        // Save the file on the server 
         move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadDir . $filename);
-
     } else {
-        // if he didnt upload just use the old one
-        $photo = $_POST['old_photo'] ?? null;
+        $photo = $_POST['old_photo'] ?? $currentUser['Photo'];
     }
-}
 
-
-    // Save to DB
+    // ----- Update the user in DB -----
     Admin::updateUserAcc($user_id, $name, $age, $email, $password, $photo);
 
-    // Redirect to correct account page
+    // Redirect based on account type
     if ($account_type === 'admin') {
         header("Location: ../admin_account.php?updated=1");
     } else {
@@ -81,24 +104,6 @@ if (isset($_POST['update_user_id'])) {
     exit();
 }
 
-
-// Check if the form is for updating a user
-if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] == 0) {
-    $uploadDir = __DIR__ . '/../uploads/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true); // create if missing
-    }
-
-    // Sanitize filename to remove special chars
-    $filename = preg_replace("/[^a-zA-Z0-9_\-\.]/", "_", $_FILES['profile_image']['name']);
-    $photo = 'uploads/' . $filename;
-
-    move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadDir . $filename);
-
-    // Redirect to avoid form resubmission
-    header("Location: ../user_account.php?updated=1");
-    exit();
-}
 ?>
 
 <?php
