@@ -83,7 +83,7 @@ if ($payment_method) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                  
+
 
                 </ul>
 
@@ -101,14 +101,14 @@ if ($payment_method) {
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    
-                        <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.php">Login</a>
-                        </button>
-                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
-                    </div>
+
+                    <button class="btn btn-dark" id="login-btn">
+                        <a class="text-decoration-none text-white" href="./login.php">Login</a>
+                    </button>
+                    <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                 </div>
             </div>
+        </div>
         </div>
     </nav>
     <!--Bill body-->
@@ -155,7 +155,9 @@ if ($payment_method) {
 
                     <!-- Button -->
                     <div class="text-center">
-                        <button class="btn btn-dark px-4">done</button>
+                        <button class="btn btn-dark px-4" onclick="window.location.href='index.php'">
+                            Done
+                        </button>
                     </div>
                 </div>
             </div>

@@ -121,7 +121,7 @@ $conn = Database::connect();
                             <td>
                                 <div class="d-flex justify-content-between align-items-center border rounded p-2" style="width:120px;">
                                     <button type="button" class="btn btn-sm fw-bold dec-btn">-</button>
-                                    <span class="fw-bold qty-display"><?php echo $qty; ?></span>
+                                        <span class="fw-bold qty-display"><?php echo $qty; ?></span>
                                     <button type="button" class="btn btn-sm fw-bold inc-btn">+</button>
                                 </div>
                             </td>
