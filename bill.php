@@ -2,6 +2,12 @@
 session_start();
 require_once('./php/tools.php');
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
+
 // Get the selected payment method from POST
 $payment_method = $_POST['payment'] ?? null;
 
@@ -9,10 +15,8 @@ if ($payment_method) {
     // Store it in session
     $_SESSION['payment_method'] = $payment_method;
 
-    // Assuming you already have total stored in session or calculate it
     $total = $_SESSION['cart_total'] ?? 0;
 
-    // Connect to database
     $conn = Database::connect();
 
     // Insert into your bill table
@@ -79,9 +83,7 @@ if ($payment_method) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.php">Product</a>
-                    </li>
+
 
                 </ul>
 
@@ -99,14 +101,14 @@ if ($payment_method) {
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
-                        <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.php">Login</a>
-                        </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
-                    </div>
+
+                    <button class="btn btn-dark" id="login-btn">
+                        <a class="text-decoration-none text-white" href="./login.php">Login</a>
+                    </button>
+                    <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                 </div>
             </div>
+        </div>
         </div>
     </nav>
     <!--Bill body-->
@@ -153,7 +155,9 @@ if ($payment_method) {
 
                     <!-- Button -->
                     <div class="text-center">
-                        <button class="btn btn-dark px-4">done</button>
+                        <button class="btn btn-dark px-4" onclick="window.location.href='index.php'">
+                            Done
+                        </button>
                     </div>
                 </div>
             </div>
@@ -174,7 +178,6 @@ if ($payment_method) {
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a></div>
 
                     </div>
                 </div>
@@ -189,17 +192,16 @@ if ($payment_method) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Only update dynamically if you have live cart changes
+        // Only update dynamically cart changes
         const cartTotalSpan = document.getElementById('orderTotalValue');
         const cartTotalInput = document.getElementById('cart-total-input');
 
-        // Example: if cart total changes dynamically
         function updateCartTotal(newTotal) {
             cartTotalSpan.textContent = `$${newTotal.toFixed(2)}`;
             cartTotalInput.value = newTotal.toFixed(2);
         }
 
-        // Initial value from PHP session (optional, already set)
+        // Initial value from PHP session
         let initialTotal = <?php echo $_SESSION['cart_total'] ?? 0; ?>;
         updateCartTotal(initialTotal);
     </script>

@@ -32,31 +32,14 @@ class Product
     {
         $conn = Database::connect();
 
-        $sql = "UPDATE cart SET Product_Quantity = Product_Quantity - ?,
-                                Total = (Product_Quantity - ?) * Product_Price,
-                                Sub_Total = (Product_Quantity - ?) * Product_Price
+        $sql = "UPDATE cart SET Product_Quantity = Product_Quantity - ?, Total = (Product_Quantity - ?) * Product_Price, Sub_Total = (Product_Quantity - ?) * Product_Price
                 WHERE Product_Id = ?";
-
         $query = $conn->prepare($sql);
         $query->bind_param("iiii", $amount, $amount, $amount, $product_id);
 
         return $query->execute();
     }
 
-    static function searchProduct($keyword)
-    {
-        $conn = Database::connect();
-
-        $keyword = "%$keyword%";
-
-        $sql = "SELECT * FROM product WHERE Name LIKE ? OR Description LIKE ?";
-        $query = $conn->prepare($sql);
-
-        $query->bind_param("ss", $keyword, $keyword);
-        $query->execute();
-
-        return $query->get_result()->fetch_all(MYSQLI_ASSOC);
-    }
 }
 ?>
 <?php

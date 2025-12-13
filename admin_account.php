@@ -2,8 +2,14 @@
 session_start();
 require_once('./php/tools.php');
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
+
 $conn = Database::connect();
-$result = $conn->query("SELECT * FROM account WHERE role = 'user'"); // lowercase 'role'
+$result = $conn->query("SELECT * FROM account WHERE role = 'user'"); 
 
 $users = [];
 if ($result && $result->num_rows > 0) {
@@ -12,7 +18,7 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// بعد session_start() و Database::connect()
+
 $admin = null;
 if (isset($_SESSION['username'])) {
     $stmt = $conn->prepare("SELECT * FROM account WHERE Name = ? LIMIT 1");
@@ -76,9 +82,7 @@ if (isset($_SESSION['username'])) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.php">Product</a>
-                    </li>
+                  
 
                 </ul>
 
@@ -95,11 +99,11 @@ if (isset($_SESSION['username'])) {
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
-                    <div id="auth-buttons" class="d-flex align-items-center gap-3">
+                    <div id="auth-buttons" class="d-flex align-items-center gap-3" data-loggedin="<?php echo isset($_SESSION['username']) ? 'true' : 'false'; ?>">
                         <button class="btn btn-dark" id="login-btn">
                             <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +124,7 @@ if (isset($_SESSION['username'])) {
                         <div class="profile-card">
                             <!--should receive from php-->
                             <div class="profile-image">
-                                <img src="./assets/imgs/Account/<?php echo $admin['Photo']; ?>" alt="Profile Image">
+                                <img src="./assets/imgs/Account/<?php echo basename($admin['Photo']); ?>" alt="Profile Image">
                             </div>
                             <!--should receive from php-->
                             <h3 class="profile-name"><?php echo htmlspecialchars($_SESSION['username']); ?></h3>
@@ -264,8 +268,6 @@ if (isset($_SESSION['username'])) {
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.html" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.html" class="Heading-6 ">Shop</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./products.html" class="Heading-6 ">Product</a></div>
-                        <div class="col-lg-3 col-md-6 p-4"><a href="./contactus.html" class="Heading-6 ">Contact Us</a></div>
 
                     </div>
                 </div>

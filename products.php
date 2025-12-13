@@ -2,6 +2,11 @@
 session_start();
 require_once("php/tools.php");
 
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php");
+    exit();
+}
+
 if (!isset($_GET['id'])) {
     echo "No product selected.";
     exit;
@@ -67,9 +72,7 @@ $product = $result->fetch_assoc();
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                    <li class="nav-item px-5">
-                        <a class="nav-link" href="./products.php">Product</a>
-                    </li>
+                   
 
                 </ul>
 
@@ -91,7 +94,7 @@ $product = $result->fetch_assoc();
                         <button class="btn btn-dark" id="login-btn">
                             <a class="text-decoration-none text-white" href="./login.php">Login</a>
                         </button>
-                        <button class="btn btn-dark" id="logout-btn" hidden>Logout</button>
+                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
                     </div>
                 </div>
             </div>
@@ -223,8 +226,7 @@ $product = $result->fetch_assoc();
                         <div class="row">
                             <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
                             <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
-                            <div class="col-lg-3 col-md-6 p-4"><a href="./products.php" class="Heading-6 ">Product</a>
-                            </div>
+                            
 
 
                         </div>
@@ -269,7 +271,7 @@ $product = $result->fetch_assoc();
 
                 // This is the crucial part: ensure the latest quantity is sent
                 addToCartForm.addEventListener('submit', (e) => {
-                    updateQty(); // must run right before submit
+                    updateQty(); 
                 });
 
                 // Initialize
