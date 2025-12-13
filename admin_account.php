@@ -9,7 +9,7 @@ if (!isset($_SESSION['User_ID'])) {
 
 
 $conn = Database::connect();
-$result = $conn->query("SELECT * FROM account WHERE role = 'user'"); // lowercase 'role'
+$result = $conn->query("SELECT * FROM account WHERE role = 'user'"); 
 
 $users = [];
 if ($result && $result->num_rows > 0) {
@@ -18,7 +18,7 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// بعد session_start() و Database::connect()
+
 $admin = null;
 if (isset($_SESSION['username'])) {
     $stmt = $conn->prepare("SELECT * FROM account WHERE Name = ? LIMIT 1");

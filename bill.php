@@ -15,10 +15,8 @@ if ($payment_method) {
     // Store it in session
     $_SESSION['payment_method'] = $payment_method;
 
-    // Assuming you already have total stored in session or calculate it
     $total = $_SESSION['cart_total'] ?? 0;
 
-    // Connect to database
     $conn = Database::connect();
 
     // Insert into your bill table
@@ -192,17 +190,16 @@ if ($payment_method) {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Only update dynamically if you have live cart changes
+        // Only update dynamically cart changes
         const cartTotalSpan = document.getElementById('orderTotalValue');
         const cartTotalInput = document.getElementById('cart-total-input');
 
-        // Example: if cart total changes dynamically
         function updateCartTotal(newTotal) {
             cartTotalSpan.textContent = `$${newTotal.toFixed(2)}`;
             cartTotalInput.value = newTotal.toFixed(2);
         }
 
-        // Initial value from PHP session (optional, already set)
+        // Initial value from PHP session
         let initialTotal = <?php echo $_SESSION['cart_total'] ?? 0; ?>;
         updateCartTotal(initialTotal);
     </script>

@@ -16,9 +16,7 @@ if (!isset($_SESSION['add-to-cart']) || !is_array($_SESSION['add-to-cart'])) {
 }
 
 
-// -----------------------------
 // Update SESSION
-// -----------------------------
 $exists = false;
 
 foreach ($_SESSION['add-to-cart'] as &$item) {
@@ -59,9 +57,8 @@ foreach ($_SESSION['add-to-cart'] as $item) {
 }
 
 
-// -----------------------------
+
 // Update DATABASE cart table
-// -----------------------------
 $conn = Database::connect();
 
 // Does this product already exist for THIS USER?
@@ -75,8 +72,7 @@ $exists_in_db = ($res && $res->num_rows > 0);
 if ($exists_in_db) {
     // Update row for this user
     $stmt = $conn->prepare("
-        UPDATE cart 
-        SET Product_Quantity = ?, Product_Price = ?, Sub_Total = ?, Total = ?
+        UPDATE cart SET Product_Quantity = ?, Product_Price = ?, Sub_Total = ?, Total = ?
         WHERE Product_Id = ? AND User_ID = ?
     ");
     $stmt->bind_param("idddii", $updated_qty, $product_price, $updated_sub_total, $total, $product_id, $user_id);
@@ -92,7 +88,7 @@ if ($exists_in_db) {
     $stmt->execute();
 }
 
-
 // Redirect back
 header("Location: ../cart.php");
 exit;
+?>

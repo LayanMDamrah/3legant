@@ -1,11 +1,11 @@
 <?php
 session_start();
-require_once("tools.php"); // make sure Database::connect() is included
+require_once("tools.php"); 
 
 if (isset($_POST['product_id'])) {
     $product_id = (int)$_POST['product_id'];
 
-    // Remove from session cart
+    // Remove product from session cart
     if (isset($_SESSION['add-to-cart'])) {
         foreach ($_SESSION['add-to-cart'] as $index => $item) {
             if ($item['id'] == $product_id) {
