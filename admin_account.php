@@ -196,7 +196,7 @@ if (isset($_SESSION['username'])) {
                                         </td>
 
                                         <!-- Hidden editable form (initially hidden) -->
-                                        <td class="edit" style="display:none;" colspan="5">
+                                        <td class="edit" style="display:none;" colspan="6">
                                             <form method="POST" action="./php/admin.php" enctype="multipart/form-data" class="d-flex gap-2 align-items-center">
                                                 <input type="hidden" name="account_type" value="admin">
                                                 <input type="hidden" name="update_user_id" value="<?= $user['User_ID']; ?>">
@@ -221,18 +221,18 @@ if (isset($_SESSION['username'])) {
                                         </tr>
                                     <?php endforeach; ?>
                                     <tr>
-                                        <button id="show-form-btn" class="btn btn-primary" >Add New User</button>
+                                        <button id="show-form-btn" class="btn btn-dark mb-4" >Add New User</button>
                                             <div id="user-form" class="d-none mt-3">
                                                 <form method="POST" action="./php/admin.php" class="d-flex gap-3 align-items-center">
                                                     <input type="hidden" name="create_new_user" value="1">
 
-                                                    <input type="text" name="name" class="form-control" placeholder="Name" required>
-                                                    <input type="number" name="age" class="form-control" placeholder="Age" required>
-                                                    <input type="email" name="email" class="form-control" placeholder="Email" required>
-                                                    <input type="text" name="password" class="form-control" placeholder="Password" required>
-                                                    <input type="text" name="photo" class="form-control" placeholder="Photo Name">
+                                                    <input type="text" name="name" class="form-control mb-3" placeholder="Name" required>
+                                                    <input type="number" name="age" class="form-control mb-3" placeholder="Age" required>
+                                                    <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
+                                                    <input type="text" name="password" class="form-control mb-3" placeholder="Password" required>
+                                                    <input type="text" name="photo" class="form-control mb-3" placeholder="Photo Name">
 
-                                                    <button type="submit" class="btn btn-success">Add New User</button>
+                                                    <button type="submit" class="btn btn-success mb-2">Add New User</button>
                                                 </form>
                                             </div>
 

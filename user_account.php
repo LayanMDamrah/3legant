@@ -90,10 +90,10 @@ if (!$user) {
                             <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                         </a>
                     <?php } ?>
-                    <a href="./user.php" class="btn btn-link nav-icon p-0">
+                    <!-- <a href="./user.php" class="btn btn-link nav-icon p-0">
 
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
-                    </a>
+                    </a> -->
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
