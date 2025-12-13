@@ -2,23 +2,22 @@
 session_start();
 require_once("./php/tools.php");
 
-// إذا كان المستخدم مسجل دخول
+// If he was logedin
 if (isset($_SESSION['User_ID'])) {
 
     $user_id = $_SESSION['User_ID'];
     $conn = Database::connect();
 
-    // حذف السلة من قاعدة البيانات
+    // Delete the cart from the DB
     $stmt = $conn->prepare("DELETE FROM cart WHERE User_ID = ?");
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
 }
 
-// مسح جميع بيانات الجلسة
+// Delete the session
 session_unset();
 session_destroy();
 
-// إعادة التوجيه لصفحة login
 header("Location: login.php");
 exit();
 ?>

@@ -271,7 +271,7 @@ $product = $result->fetch_assoc();
 
                 // This is the crucial part: ensure the latest quantity is sent
                 addToCartForm.addEventListener('submit', (e) => {
-                    updateQty(); // must run right before submit
+                    updateQty(); 
                 });
 
                 // Initialize

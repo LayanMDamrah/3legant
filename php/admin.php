@@ -49,21 +49,21 @@ if (isset($_POST['update_user_id'])) {
     // USER → upload real photo
     if (!empty($_FILES['profile_image']['name']) && $_FILES['profile_image']['error'] === 0) {
 
-        // مجلد التحميل
+        //Upload file
         $uploadDir = __DIR__ . '/assets/imgs/Account/'; // لاحظ الـ '/' في النهاية
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-        // تنظيف اسم الملف
+        // cleaning the file name 
         $filename = preg_replace("/[^a-zA-Z0-9_\-\.]/", "_", $_FILES['profile_image']['name']);
 
-        // مسار الصورة النهائي للقاعدة أو الاستخدام
+        //where to save the upload photo
         $photo = 'assets/imgs/Account/' . $filename;
 
-        // حفظ الملف على السيرفر
+        // Save the file on the server 
         move_uploaded_file($_FILES['profile_image']['tmp_name'], $uploadDir . $filename);
 
     } else {
-        // لم يرفع المستخدم صورة → الاحتفاظ بالصورة القديمة
+        // if he didnt upload just use the old one
         $photo = $_POST['old_photo'] ?? null;
     }
 }
