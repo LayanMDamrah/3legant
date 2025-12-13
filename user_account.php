@@ -9,11 +9,9 @@ if (!isset($_SESSION['User_ID'])) {
 
 $conn = Database::connect();
 
-// Make sure the user is logged in
-if (!isset($_SESSION['User_ID'])) {
-    header('Location: login.php');
-    exit();
-}
+$error = $_GET['error'] ?? '';
+$invalidEmail = $error === 'invalid_email';
+$alreadyUsed  = $error === 'alreadyused';
 
 // Fetch the logged-in user's info
 $userid = $_SESSION['User_ID'];
@@ -54,12 +52,13 @@ if (!$user) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
+
 <body>
     <?php
-    if(isset($_SESSION['username']) && isset($_SESSION['password']))
+    if (isset($_SESSION['username']) && isset($_SESSION['password']))
     ?>
-   <!-- navbar -->
-   <nav class="navbar navbar-expand-lg navbar-light px-4 ">
+    <!-- navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light px-4 ">
         <div class="container">
             <a class="navbar-brand me-5 ms-5 Heading-2" href="./index.php">3legant</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -76,34 +75,36 @@ if (!$user) {
                     <li class="nav-item px-5">
                         <a class="nav-link" href="./shop.php">Shop</a>
                     </li>
-                   
-                  
+
+
                 </ul>
 
                 <div class="d-flex align-items-center gap-3 ms-auto ">
-                    
+
                     <?php if ($_SESSION['role'] === 'admin') { ?>
                         <a href="./admin_account.php" class="btn btn-link nav-icon p-0">
                             <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                         </a>
-                    <?php } else {?>
+                    <?php } else { ?>
                         <a href="./user_account.php" class="btn btn-link nav-icon p-0">
                             <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                         </a>
                     <?php } ?>
                     <a href="./user.php" class="btn btn-link nav-icon p-0">
-                        
+
                         <img src="./assets/imgs/icons/interface/outline/user-circle-1.svg" alt="User">
                     </a>
                     <a href="./cart.php" class="btn btn-link nav-icon p-0">
                         <img src="./assets/imgs/icons/Elements/Navigation/Cart Button.svg" alt="Cart">
                     </a>
                     <div id="auth-buttons" class="d-flex align-items-center gap-3">
-                        <button class="btn btn-dark" id="login-btn">
-                            <a class="text-decoration-none text-white" href="./login.php">Login</a>
-                        </button>
-                        <button class="btn btn-dark" id="logout-btn" onclick="window.location.href='logout.php'">Logout</button>
+                        <?php if (!isset($_SESSION['User_ID'])): ?>
+                            <a href="./login.php" class="btn btn-dark">Login</a>
+                        <?php else: ?>
+                            <button class="btn btn-dark" onclick="window.location.href='logout.php'">Logout</button>
+                        <?php endif; ?>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -148,11 +149,11 @@ if (!$user) {
                         <form>
                             <div class="info-box">
                                 <!--should receive from php-->
-                                <p><strong>Name:</strong> <span ><?= htmlspecialchars($user['Name']); ?></span></p>
+                                <p><strong>Name:</strong> <span><?= htmlspecialchars($user['Name']); ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>age:</strong> <span ><?= number_format($user['Age']); ?></span></p>
+                                <p><strong>age:</strong> <span><?= number_format($user['Age']); ?></span></p>
                                 <!--should receive from php-->
-                                <p><strong>Email:</strong> <span ><?= htmlspecialchars($user['Email']); ?></span></p>
+                                <p><strong>Email:</strong> <span><?= htmlspecialchars($user['Email']); ?></span></p>
 
                             </div>
                         </form>
@@ -166,17 +167,23 @@ if (!$user) {
                             <form action="./php/admin.php" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="account_type" value="user">
                                 <input type="hidden" name="update_user_id" value="<?= $user['User_ID']; ?>">
+                                <input type="hidden" name="old_photo" value="<?= htmlspecialchars($user['Photo']); ?>">
+
                                 <label>NAME *</label>
-                                <input type="text" name="name" placeholder="Name">
+                                <input type="text" name="name" placeholder="Name" value="<?= htmlspecialchars($user['Name']); ?>">
 
                                 <label>AGE *</label>
-                                <input type="text" name="age" placeholder="Age">
+                                <input type="text" name="age" placeholder="Age" value="<?= htmlspecialchars($user['Age']); ?>">
 
                                 <label>EMAIL *</label>
-                                <input type="email" name="email" placeholder="Email">
+                                <input type="email" name="email" placeholder="Email" value="<?= htmlspecialchars($user['Email']); ?>">
+                                <!-- Error messages for email -->
+                                <p id="invalid" <?= $invalidEmail ? '' : 'hidden'; ?>>This email is invalid!</p>
+                                <p id="alreadyused" <?= $alreadyUsed ? '' : 'hidden'; ?>>This email is already used!</p>
+
 
                                 <label>PASSWORD *</label>
-                                <input type="password" name="password" placeholder="Password">
+                                <input type="password" name="password" placeholder="Password" value="<?= htmlspecialchars($user['Password']); ?>">
 
                                 <label>PROFILE IMAGE</label>
                                 <input type="file" name="profile_image" accept="image/*">
@@ -185,11 +192,12 @@ if (!$user) {
                             </form>
                         </div>
 
+
                     </div>
                     <!--to show the forms i should write to change information-->
                     <script>
-                        document.getElementById("editBtn").addEventListener("click", function () {
-                        document.getElementById("editForm").classList.toggle("hidden");
+                        document.getElementById("editBtn").addEventListener("click", function() {
+                            document.getElementById("editForm").classList.toggle("hidden");
                         });
                     </script>
 
@@ -211,7 +219,7 @@ if (!$user) {
                     <div class="row">
                         <div class="col-lg-3 col-md-6 p-4"><a href="./index.php" class="Heading-6">Home</a></div>
                         <div class="col-lg-3 col-md-6 p-4"><a href="./shop.php" class="Heading-6 ">Shop</a></div>
-                       
+
                     </div>
                 </div>
 
