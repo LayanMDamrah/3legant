@@ -1,0 +1,83 @@
+/* list style */
+.profile-card {
+    width: 260px;
+    background: #f7f9fb;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.profile-image img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-name {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.section-title {
+    text-align: left;
+    margin-top: 25px;
+    font-weight: 600;
+}
+
+.divider {
+    border: none;
+    border-bottom: 1px solid #aaa;
+    margin: 5px 0 15px 0;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    text-align: left;
+}
+
+.menu li {
+    margin: 15px 0;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.menu li a:hover {
+    color: #000;
+}
+
+/* detalis style */
+
+.account-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.info-box p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.note {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: #666;
+}
